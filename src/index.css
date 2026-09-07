@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #EEECE3;
+  --bg-surface: #F7F6F1;
+  --bg-card: #E5E2D7;
+  --text-primary: #181A1B;
+  --text-muted: #5D6467;
+  --text-subtle: #8A9194;
+  --border-subtle: #D3CFBF;
+  --border-strong: #B5B09E;
+  
+  --brand-teal: #4B7C85;
+  --brand-gold: #A78B45;
+  --brand-amber: #6C4A28;
+  --brand-forest: #4A5D44;
+  --brand-burgundy: #7A4445;
+}
+
+.dark {
+  --bg-primary: #101212;
+  --bg-surface: #171917;
+  --bg-card: #1E211F;
+  --text-primary: #F2F0E9;
+  --text-muted: #B9B8AD;
+  --text-subtle: #757876;
+  --border-subtle: #272B28;
+  --border-strong: #3A403C;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Manrope', 'Inter', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Technical Linework & Blueprint Grid */
+.technical-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(167, 139, 69, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(167, 139, 69, 0.05) 1px, transparent 1px);
+}
+
+.dark .technical-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Subtle Film Grain */
+.grain-overlay {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.dark .grain-overlay {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-gold);
+}
+
+/* Micro Technical Label */
+.tech-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.725rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Image mask reveal effect */
+.mask-industrial {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transition: clip-path 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Architectural Card Border */
+.border-eng {
+  border: 1px solid var(--border-subtle);
+}
+
+.border-eng-t {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.border-eng-b {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.border-eng-l {
+  border-left: 1px solid var(--border-subtle);
+}
+
+.border-eng-r {
+  border-right: 1px solid var(--border-subtle);
+}
