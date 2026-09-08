@@ -9,7 +9,6 @@ import ManufacturingSection from './components/ManufacturingSection';
 import QualitySection from './components/QualitySection';
 import InfrastructureSection from './components/InfrastructureSection';
 import LogisticsSection from './components/LogisticsSection';
-import TrustSection from './components/TrustSection';
 import GlobalSection from './components/GlobalSection';
 import QuotePortal from './components/QuotePortal';
 import Footer from './components/Footer';
@@ -94,8 +93,6 @@ export default function App() {
         <InfrastructureSection />
 
         <LogisticsSection />
-
-        <TrustSection />
 
         <GlobalSection
           onOpenQuote={() => handleOpenQuote()}

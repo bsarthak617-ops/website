@@ -21,7 +21,6 @@ export default function Navbar({ isDark, setIsDark, onOpenSpecs, onOpenQuote }) 
     { name: 'Quality', href: '#quality' },
     { name: 'Infrastructure', href: '#infrastructure' },
     { name: 'Logistics', href: '#logistics' },
-    { name: 'Clients', href: '#clients' },
   ];
 
   return (

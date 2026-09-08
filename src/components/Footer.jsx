@@ -52,7 +52,6 @@ export default function Footer({ onOpenSpecs, onOpenQuote }) {
               <li><a href="#quality" className="hover:text-brand-text-light dark:hover:text-brand-text-dark transition-colors">05 / Quality & Labs</a></li>
               <li><a href="#infrastructure" className="hover:text-brand-text-light dark:hover:text-brand-text-dark transition-colors">06 / Infrastructure Map</a></li>
               <li><a href="#logistics" className="hover:text-brand-text-light dark:hover:text-brand-text-dark transition-colors">07 / Logistics & Supply Chain</a></li>
-              <li><a href="#clients" className="hover:text-brand-text-light dark:hover:text-brand-text-dark transition-colors">08 / Enterprise Clients</a></li>
             </ul>
           </div>
 
