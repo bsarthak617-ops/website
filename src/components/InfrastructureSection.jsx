@@ -159,55 +159,28 @@ export default function InfrastructureSection() {
                 {/* 9 Supply Corridor Route Animations */}
                 {SUPPLY_ROUTES.map((route) => (
                   <g key={route.id}>
-                    {/* Animated Outward Dashes flowing from Odisha to destination state */}
+                    {/* Small dotted lines travelling from Odisha to destination state */}
                     <path
                       d={route.path}
                       fill="none"
                       stroke={route.color}
-                      strokeWidth="10"
-                      strokeDasharray="14 28"
+                      strokeWidth="8"
+                      strokeDasharray="1 23"
                       strokeLinecap="round"
-                      opacity="0.9"
+                      opacity="0.95"
                       className="animate-flow-outward"
-                      style={{ animationDuration: `${route.dur + 2}s` }}
+                      style={{ animationDuration: `${route.dur + 4}s` }}
                     />
 
-                    {/* Smooth moving pulse bead moving along the route from Odisha outward */}
-                    <circle r="14" fill={route.color} opacity="0.85">
-                      <animateMotion
-                        path={route.path}
-                        dur={`${route.dur}s`}
-                        repeatCount="indefinite"
-                        keyPoints="0;1"
-                        keyTimes="0;1"
-                      />
-                    </circle>
-
-                    {/* Secondary Staggered Pulse Bead */}
-                    <circle r="10" fill={route.color} opacity="0.65">
-                      <animateMotion
-                        path={route.path}
-                        dur={`${route.dur}s`}
-                        begin={`${route.dur / 2}s`}
-                        repeatCount="indefinite"
-                        keyPoints="0;1"
-                        keyTimes="0;1"
-                      />
-                    </circle>
-
-                    {/* Subtle Destination Arrival Ripple */}
+                    {/* Destination End Point (Big Dot) */}
                     <circle
                       cx={route.dx}
                       cy={route.dy}
-                      r="26"
-                      fill="none"
-                      stroke={route.color}
-                      strokeWidth="3.5"
-                      opacity="0.45"
-                    >
-                      <animate attributeName="r" values="18;34;18" dur="3.2s" repeatCount="indefinite" />
-                      <animate attributeName="opacity" values="0.6;0.15;0.6" dur="3.2s" repeatCount="indefinite" />
-                    </circle>
+                      r="16"
+                      fill={route.color}
+                      stroke="#EEECE3"
+                      strokeWidth="2.5"
+                    />
                   </g>
                 ))}
               </svg>

@@ -57,12 +57,12 @@ html {
     stroke-dashoffset: 0;
   }
   to {
-    stroke-dashoffset: 400;
+    stroke-dashoffset: 480;
   }
 }
 
 .animate-flow-outward {
-  animation: flowOutward 8s linear infinite;
+  animation: flowOutward 10s linear infinite;
 }
 
 /* Subtle Film Grain */
