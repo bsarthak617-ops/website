@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDown, ArrowUpRight, ShieldCheck, Gauge, ChevronRight } from 'lucide-react';
 
 const TOTAL_FRAMES = 240;
 
@@ -62,9 +61,9 @@ export default function Hero({ onOpenQuote, onOpenSpecs }) {
     ctx.save();
     ctx.scale(dpr, dpr);
 
-    // Natural background fill matching video boundaries (#E7E6DF)
+    // Natural background fill matching website background (#EEECE3 in light mode, #101212 in dark mode)
     const isDarkMode = document.documentElement.classList.contains('dark');
-    ctx.fillStyle = isDarkMode ? '#111314' : '#E7E6DF';
+    ctx.fillStyle = isDarkMode ? '#101212' : '#EEECE3';
     ctx.fillRect(0, 0, displayWidth, displayHeight);
 
     // Find requested frame or nearest loaded frame
@@ -84,21 +83,27 @@ export default function Hero({ onOpenQuote, onOpenSpecs }) {
     }
 
     if (img && img.complete) {
-      // Exact aspect ratio (1280x720 -> 16:9) preservation without cropping or stretching
-      const videoRatio = 1280 / 720;
+      // Fullscreen Cover: scale to fill 100% of display width and height without any blank sidebars
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.filter = 'brightness(1.08) contrast(1.02)';
+
+      const videoRatio = 1920 / 1080;
       const canvasRatio = displayWidth / displayHeight;
       let drawW, drawH, drawX, drawY;
 
       if (canvasRatio > videoRatio) {
-        drawH = displayHeight;
-        drawW = drawH * videoRatio;
-        drawX = (displayWidth - drawW) / 2;
-        drawY = 0;
-      } else {
+        // Wider screen: scale by width to cover full width
         drawW = displayWidth;
         drawH = drawW / videoRatio;
         drawX = 0;
         drawY = (displayHeight - drawH) / 2;
+      } else {
+        // Taller screen: scale by height to cover full height
+        drawH = displayHeight;
+        drawW = drawH * videoRatio;
+        drawX = (displayWidth - drawW) / 2;
+        drawY = 0;
       }
 
       ctx.drawImage(img, drawX, drawY, drawW, drawH);
@@ -163,15 +168,16 @@ export default function Hero({ onOpenQuote, onOpenSpecs }) {
   return (
     <div ref={containerRef} className="relative w-full h-[320vh]">
       {/* Sticky Fullscreen Pinned Animation Stage */}
-      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center bg-[#E7E6DF] dark:bg-[#111314]">
-        {/* Hardware-Accelerated Canvas for Smooth 60fps Scrubbing */}
+      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center bg-brand-bg-light dark:bg-brand-bg-dark">
+        {/* Hardware-Accelerated High-DPI Canvas for Crisp Fullscreen Scrubbing */}
         <canvas
           ref={canvasRef}
-          className="w-full h-full object-contain block"
+          className="w-full h-full block filter brightness-[1.08] contrast-[1.02]"
         />
 
-        {/* Subtle Edge Gradients for Inconspicuous Seamless Page Blending */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-brand-bg-light/80 via-transparent to-brand-bg-light/40 dark:from-brand-bg-dark/80 dark:via-transparent dark:to-brand-bg-dark/40" />
+        {/* Seamless Edge Blends: Natural top and bottom color feather for uninterrupted flow */}
+        <div className="absolute inset-x-0 top-0 h-32 pointer-events-none bg-gradient-to-b from-brand-bg-light/80 via-brand-bg-light/20 to-transparent dark:from-brand-bg-dark/80 dark:via-brand-bg-dark/20 dark:to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-52 pointer-events-none bg-gradient-to-t from-brand-bg-light via-brand-bg-light/70 to-transparent dark:from-brand-bg-dark dark:via-brand-bg-dark/70 dark:to-transparent" />
 
         {/* Initial Scroll Prompt (Fades out as user scrolls) */}
         <div
@@ -190,19 +196,19 @@ export default function Hero({ onOpenQuote, onOpenSpecs }) {
           </div>
         </div>
 
-        {/* Final Text Reveal: POWERING INDUSTRY RELIABLY */}
+        {/* Headline Text Reveal: OILTEQ INDUSTRIES & POWERING INDUSTRY RELIABLY */}
         <div
-          className="absolute inset-x-0 bottom-12 sm:bottom-16 md:bottom-20 max-w-6xl mx-auto px-6 lg:px-8 text-center pointer-events-none z-10"
+          className="absolute inset-x-0 bottom-16 sm:bottom-20 md:bottom-24 max-w-6xl mx-auto px-6 lg:px-8 text-center pointer-events-none z-10"
           style={{
             opacity: textOpacity,
             transform: `translateY(${textTranslateY}px)`,
           }}
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 mb-4 border border-brand-charcoal/20 dark:border-white/20 bg-brand-bg-light/90 dark:bg-brand-bg-dark/90 backdrop-blur-md rounded-sm shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-brand-gold animate-pulse" />
-            <span className="tech-label text-brand-gold dark:text-brand-gold-light text-[10px] tracking-widest font-mono">
-              OILTEQ INDUSTRIES • RELIABLE BULK ENERGY
-            </span>
+          {/* Company Brand Title */}
+          <div className="mb-2 sm:mb-3">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-wider text-black dark:text-white uppercase font-sans drop-shadow-sm">
+              OILTEQ INDUSTRIES
+            </h2>
           </div>
 
           <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tightest leading-[1.02] text-brand-charcoal dark:text-white uppercase font-sans drop-shadow-md">
@@ -214,72 +220,6 @@ export default function Hero({ onOpenQuote, onOpenSpecs }) {
           </p>
         </div>
       </div>
-
-      {/* Continuation of Website Content (Seamless Uninterrupted Flow) */}
-      <section className="relative z-20 bg-brand-bg-light dark:bg-brand-bg-dark pt-16 pb-20 px-4 sm:px-6 lg:px-8 border-t border-brand-border-light dark:border-brand-border-dark shadow-md">
-        <div className="max-w-7xl mx-auto">
-          {/* Top Operational Scale Ribbon */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pb-12 mb-12 border-b border-brand-border-light dark:border-brand-border-dark">
-            <div className="space-y-1">
-              <span className="tech-label text-brand-gold">01 / MANUFACTURING SCALE</span>
-              <p className="text-base font-bold text-brand-text-light dark:text-brand-text-dark">6,000 MT / Month Capacity</p>
-              <p className="text-xs text-brand-text-light-muted dark:text-brand-text-dark-muted">3 Manufacturing Plants in Jharsuguda, Odisha</p>
-            </div>
-
-            <div className="space-y-1">
-              <span className="tech-label text-brand-gold">02 / IMPORT TERMINALS</span>
-              <p className="text-base font-bold text-brand-text-light dark:text-brand-text-dark">~6,000 MT / Month Sourcing</p>
-              <p className="text-xs text-brand-text-light-muted dark:text-brand-text-dark-muted">Direct Port Dispatches across Western & Eastern Corridors</p>
-            </div>
-
-            <div className="space-y-1">
-              <span className="tech-label text-brand-gold">03 / QUALITY ASSURANCE</span>
-              <p className="text-base font-bold text-brand-text-light dark:text-brand-text-dark flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-brand-forest" />
-                Batch-Certified COA Delivery
-              </p>
-              <p className="text-xs text-brand-text-light-muted dark:text-brand-text-dark-muted">In-House ASTM & ISO Analytical Testing Laboratories</p>
-            </div>
-          </div>
-
-          {/* Action CTAs */}
-          <div className="flex flex-wrap items-center justify-between gap-6">
-            <div className="flex flex-wrap items-center gap-4">
-              <button
-                onClick={onOpenQuote}
-                className="inline-flex items-center gap-3 px-6 py-3.5 bg-brand-charcoal text-white hover:bg-brand-gold font-bold text-xs uppercase tracking-widest transition-all duration-200 shadow-md group rounded-sm"
-              >
-                <span>Request a Quote</span>
-                <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </button>
-
-              <a
-                href="#products"
-                className="inline-flex items-center gap-2 px-6 py-3.5 border border-brand-border-light dark:border-brand-border-dark hover:border-brand-text-light dark:hover:border-brand-text-dark text-brand-text-light dark:text-brand-text-dark font-semibold text-xs uppercase tracking-widest transition-colors duration-200 rounded-sm"
-              >
-                <span>Explore Products</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </a>
-
-              <button
-                onClick={onOpenSpecs}
-                className="inline-flex items-center gap-2 px-4 py-3.5 text-xs font-semibold uppercase tracking-wider text-brand-text-light-muted hover:text-brand-text-light dark:text-brand-text-dark-muted dark:hover:text-brand-text-dark transition-colors"
-              >
-                <Gauge className="w-4 h-4 text-brand-teal" />
-                <span>Laboratory Specs</span>
-              </button>
-            </div>
-
-            <a
-              href="#about"
-              className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-brand-text-light-muted hover:text-brand-text-light dark:text-brand-text-dark-muted dark:hover:text-brand-text-dark transition-colors group font-mono"
-            >
-              <span>Explore Industrial Operations</span>
-              <ArrowDown className="w-3.5 h-3.5 transition-transform group-hover:translate-y-1" />
-            </a>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

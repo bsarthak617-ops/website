@@ -31,8 +31,8 @@ export default function ProductsSection({ onOpenSpecs, onSelectProductQuote }) {
           </button>
         </div>
 
-        {/* Product Grid / Showcase Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Product Grid / 2-Column Balanced Showcase Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {PRODUCTS.map((product, idx) => (
             <motion.div
               key={product.id}
@@ -40,18 +40,18 @@ export default function ProductsSection({ onOpenSpecs, onSelectProductQuote }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.15 }}
-              className="group flex flex-col justify-between border border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface hover:border-brand-gold/70 dark:hover:border-brand-gold/70 transition-all duration-300 rounded-sm overflow-hidden"
+              className="group flex flex-col justify-between border border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface hover:border-brand-gold/70 dark:hover:border-brand-gold/70 transition-all duration-300 rounded-sm overflow-hidden shadow-sm hover:shadow-md"
             >
               {/* Product Header & Visual */}
               <div>
                 {/* Image with Dark Architectural Overlay */}
-                <div className="relative h-56 overflow-hidden border-b border-brand-border-light dark:border-brand-border-dark">
+                <div className="relative h-64 overflow-hidden border-b border-brand-border-light dark:border-brand-border-dark">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover filter contrast-110 grayscale-[25%] group-hover:scale-105 group-hover:grayscale-0 transition-all duration-500"
+                    className="w-full h-full object-cover filter contrast-105 group-hover:scale-105 transition-all duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-charcoal/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-charcoal/85 via-brand-charcoal/25 to-transparent" />
                   
                   {/* Badge & Code */}
                   <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
@@ -63,65 +63,49 @@ export default function ProductsSection({ onOpenSpecs, onSelectProductQuote }) {
                     </span>
                   </div>
 
-                  <div className="absolute bottom-4 left-4">
+                  <div className="absolute bottom-4 left-4 right-4">
                     <span className="tech-label text-brand-gold-light block">PRODUCT 0{idx + 1}</span>
-                    <h3 className="text-xl font-bold text-white tracking-tight">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
                       {product.name}
                     </h3>
                   </div>
                 </div>
 
                 {/* Body Content */}
-                <div className="p-6 space-y-5">
+                <div className="p-6 sm:p-7 space-y-6">
                   <p className="text-xs font-semibold text-brand-teal dark:text-brand-teal-light uppercase tracking-wider">
                     {product.subtitle}
                   </p>
                   
-                  <p className="text-xs text-brand-text-light-muted dark:text-brand-text-dark-muted leading-relaxed">
+                  <p className="text-xs sm:text-sm text-brand-text-light-muted dark:text-brand-text-dark-muted leading-relaxed">
                     {product.description}
                   </p>
 
-                  {/* Primary Applications */}
-                  <div>
-                    <span className="tech-label text-brand-text-light-subtle dark:text-brand-text-dark-subtle block mb-2">
-                      TYPICAL APPLICATIONS:
+                  {/* Primary Applications in Checklist Format */}
+                  <div className="pt-2 border-t border-brand-border-light/60 dark:border-brand-border-dark/60">
+                    <span className="tech-label text-brand-gold dark:text-brand-gold-light block mb-3 font-mono">
+                      APPLICATIONS:
                     </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {product.applications.slice(0, 3).map((app, i) => (
-                        <span
+                    <ul className="space-y-2.5">
+                      {product.applications.map((app, i) => (
+                        <li
                           key={i}
-                          className="px-2 py-1 text-[11px] font-medium bg-brand-bg-light dark:bg-brand-bg-dark border border-brand-border-light dark:border-brand-border-dark text-brand-text-light dark:text-brand-text-dark rounded-sm"
+                          className="flex items-start gap-2.5 text-xs sm:text-sm text-brand-text-light dark:text-brand-text-dark font-medium leading-snug"
                         >
-                          {app}
-                        </span>
+                          <CheckCircle2 className="w-4 h-4 text-brand-gold shrink-0 mt-0.5" />
+                          <span>{app}</span>
+                        </li>
                       ))}
-                    </div>
-                  </div>
-
-                  {/* Key Parameter Preview */}
-                  <div className="border-t border-brand-border-light dark:border-brand-border-dark pt-4">
-                    <span className="tech-label text-brand-text-light-subtle dark:text-brand-text-dark-subtle block mb-2">
-                      SPECIFICATION HIGHLIGHTS:
-                    </span>
-                    <div className="space-y-1.5 text-xs font-mono">
-                      {product.specifications.slice(0, 3).map((spec, i) => (
-                        <div key={i} className="flex items-center justify-between text-brand-text-light-muted dark:text-brand-text-dark-muted">
-                          <span className="truncate pr-2">{spec.parameter.split('(')[0]}</span>
-                          <span className="font-semibold text-brand-text-light dark:text-brand-text-dark text-right whitespace-nowrap">
-                            {spec.standard}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+                    </ul>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="p-6 pt-0 border-t border-brand-border-light/60 dark:border-brand-border-dark/60 mt-4 flex items-center gap-3">
+              <div className="p-6 sm:p-7 pt-0 border-t border-brand-border-light/60 dark:border-brand-border-dark/60 mt-4 flex items-center gap-3">
                 <button
                   onClick={() => onSelectProductQuote(product.name)}
-                  className="flex-1 py-2.5 px-3 text-xs font-bold uppercase tracking-wider bg-brand-charcoal text-white hover:bg-brand-gold transition-colors flex items-center justify-center gap-2 rounded-sm"
+                  className="flex-1 py-3 px-4 text-xs font-bold uppercase tracking-wider bg-brand-charcoal text-white hover:bg-brand-gold transition-colors flex items-center justify-center gap-2 rounded-sm shadow-sm"
                 >
                   <span>Request Quote</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
@@ -129,7 +113,7 @@ export default function ProductsSection({ onOpenSpecs, onSelectProductQuote }) {
 
                 <button
                   onClick={onOpenSpecs}
-                  className="p-2.5 border border-brand-border-light dark:border-brand-border-dark hover:border-brand-teal text-brand-text-light dark:text-brand-text-dark transition-colors rounded-sm"
+                  className="p-3 border border-brand-border-light dark:border-brand-border-dark hover:border-brand-teal text-brand-text-light dark:text-brand-text-dark transition-colors rounded-sm"
                   title="View Full Test COA Specifications"
                 >
                   <FileText className="w-4 h-4 text-brand-teal" />

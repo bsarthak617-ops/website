@@ -6,7 +6,6 @@ import MetricsSection from './components/MetricsSection';
 import ProductsSection from './components/ProductsSection';
 import IndustriesSection from './components/IndustriesSection';
 import ManufacturingSection from './components/ManufacturingSection';
-import QualitySection from './components/QualitySection';
 import InfrastructureSection from './components/InfrastructureSection';
 import LogisticsSection from './components/LogisticsSection';
 import GlobalSection from './components/GlobalSection';
@@ -18,7 +17,7 @@ export default function App() {
   // Default to Light Mode as per user preference (#EEECE3 base)
   const [isDark, setIsDark] = useState(false);
   const [isSpecsOpen, setIsSpecsOpen] = useState(false);
-  const [selectedQuoteProduct, setSelectedQuoteProduct] = useState('LDO Substitute');
+  const [selectedQuoteProduct, setSelectedQuoteProduct] = useState('Tyre Pyrolysis Oil — TPO');
   const [selectedQuoteIndustry, setSelectedQuoteIndustry] = useState('Hotmix Asphalt Plants');
 
   useEffect(() => {
@@ -85,10 +84,6 @@ export default function App() {
         />
 
         <ManufacturingSection />
-
-        <QualitySection
-          onOpenSpecs={() => setIsSpecsOpen(true)}
-        />
 
         <InfrastructureSection />
 

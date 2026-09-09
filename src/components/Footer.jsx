@@ -22,7 +22,7 @@ export default function Footer({ onOpenSpecs, onOpenQuote }) {
             </a>
 
             <p className="text-xs sm:text-sm text-brand-text-light-muted dark:text-brand-text-dark-muted leading-relaxed max-w-md">
-              Oilteq Industries is a dedicated industrial fuel manufacturer and importer supplying LDO substitutes, Furnace Oil substitutes, and imported fuels with 6,000 MT/month manufacturing capacity and nationwide tanker delivery.
+              Oilteq Industries is a dedicated industrial fuel manufacturer and supplier delivering Tyre Pyrolysis Oil (TPO), Blended Fuel Oil, and high-heat industrial energy solutions with reliable nationwide tanker dispatch.
             </p>
 
             <div className="space-y-2 text-xs font-mono text-brand-text-light-muted dark:text-brand-text-dark-muted">
@@ -49,9 +49,8 @@ export default function Footer({ onOpenSpecs, onOpenQuote }) {
               <li><a href="#products" className="hover:text-brand-text-light dark:hover:text-brand-text-dark transition-colors">02 / Products & Substitutes</a></li>
               <li><a href="#industries" className="hover:text-brand-text-light dark:hover:text-brand-text-dark transition-colors">03 / Industry Sectors</a></li>
               <li><a href="#manufacturing" className="hover:text-brand-text-light dark:hover:text-brand-text-dark transition-colors">04 / Manufacturing Process</a></li>
-              <li><a href="#quality" className="hover:text-brand-text-light dark:hover:text-brand-text-dark transition-colors">05 / Quality & Labs</a></li>
-              <li><a href="#infrastructure" className="hover:text-brand-text-light dark:hover:text-brand-text-dark transition-colors">06 / Infrastructure Map</a></li>
-              <li><a href="#logistics" className="hover:text-brand-text-light dark:hover:text-brand-text-dark transition-colors">07 / Logistics & Supply Chain</a></li>
+              <li><a href="#infrastructure" className="hover:text-brand-text-light dark:hover:text-brand-text-dark transition-colors">05 / Infrastructure Map</a></li>
+              <li><a href="#logistics" className="hover:text-brand-text-light dark:hover:text-brand-text-dark transition-colors">06 / Logistics & Supply Chain</a></li>
             </ul>
           </div>
 

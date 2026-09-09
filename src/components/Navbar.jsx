@@ -18,7 +18,6 @@ export default function Navbar({ isDark, setIsDark, onOpenSpecs, onOpenQuote }) 
     { name: 'Products', href: '#products' },
     { name: 'Industries', href: '#industries' },
     { name: 'Process', href: '#manufacturing' },
-    { name: 'Quality', href: '#quality' },
     { name: 'Infrastructure', href: '#infrastructure' },
     { name: 'Logistics', href: '#logistics' },
   ];

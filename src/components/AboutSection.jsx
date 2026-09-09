@@ -13,7 +13,7 @@ const iconMap = {
 
 export default function AboutSection() {
   return (
-    <section id="about" className="py-24 px-4 sm:px-6 lg:px-8 border-t border-brand-border-light dark:border-brand-border-dark relative">
+    <section id="about" className="py-24 px-4 sm:px-6 lg:px-8 relative bg-brand-bg-light dark:bg-brand-bg-dark">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark gap-4">

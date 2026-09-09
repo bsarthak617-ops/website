@@ -21,97 +21,68 @@ export const COMPANY_INFO = {
 
 export const PRODUCTS = [
   {
-    id: "ldo-substitute",
-    code: "OIL-LDO-SUB",
-    name: "LDO Substitute",
-    badge: "Domestic Production",
-    subtitle: "Engineered alternative fuel to IOCL & BPCL Light Diesel Oil (LDO)",
-    description: "Formulated for high thermal efficiency and clean atomization in light and medium industrial burners. Engineered with precise viscosity control and reduced moisture levels to protect equipment nozzles and maintain steady combustion heat.",
+    id: "tyre-pyrolysis-oil",
+    code: "OIL-TPO-PRO",
+    name: "Tyre Pyrolysis Oil — TPO",
+    badge: "Alternative Industrial Fuel",
+    subtitle: "High Calorific Value Alternative Fuel from Pyrolysis",
+    description: "Tyre Pyrolysis Oil is an alternative industrial fuel derived from the pyrolysis of end-of-life tyres. With a high calorific value and controlled quality parameters, TPO offers an effective fuel solution for a range of industrial heating applications.",
     applications: [
-      "Hotmix Asphalt Plants",
-      "Industrial Boilers & Steam Generators",
-      "Process Heating & Reheating",
-      "Agricultural & Food Processing Dryers",
-      "Foundry Crucible Preheaters"
+      "Industrial Boilers",
+      "Thermic Fluid Heaters",
+      "Furnaces",
+      "Kilns",
+      "Hot-Mix Plants",
+      "Industrial Heating Systems",
+      "Other compatible fuel-fired applications"
     ],
     specifications: [
       { parameter: "Gross Calorific Value (GCV)", standard: "10,200 – 10,600 kcal/kg", unit: "kcal/kg" },
-      { parameter: "Kinematic Viscosity @ 40°C", standard: "2.5 – 7.5 cSt", unit: "cSt" },
-      { parameter: "Density @ 15°C", standard: "0.830 – 0.880 g/cm³", unit: "g/cm³" },
-      { parameter: "Flash Point (Abel / PMCC)", standard: "> 66°C", unit: "°C" },
-      { parameter: "Sulphur Content", standard: "< 0.8% wt", unit: "% wt" },
-      { parameter: "Moisture Content", standard: "< 0.25% vol", unit: "% vol" },
-      { parameter: "Ash Content", standard: "< 0.02% wt", unit: "% wt" }
+      { parameter: "Kinematic Viscosity @ 40°C", standard: "3.2 – 8.0 cSt", unit: "cSt" },
+      { parameter: "Density @ 15°C", standard: "0.910 – 0.950 g/cm³", unit: "g/cm³" },
+      { parameter: "Flash Point (Abel / PMCC)", standard: "> 50°C", unit: "°C" },
+      { parameter: "Sulphur Content", standard: "< 1.0% wt", unit: "% wt" },
+      { parameter: "Moisture Content", standard: "< 0.40% vol", unit: "% vol" },
+      { parameter: "Ash Content", standard: "< 0.05% wt", unit: "% wt" }
     ],
     advantages: [
-      "Direct drop-in replacement with no burner modification required",
-      "Lower particulate fallout and reduced nozzle clogging",
-      "Cost-optimized thermal efficiency per ton of asphalt/steam",
-      "Batch-tested with certified laboratory dispatch COA"
+      "Sustainable industrial fuel from circular end-of-life tyre recovery",
+      "High calorific energy output providing rapid, stable thermal soak",
+      "Economical heating cost per ton compared to conventional petroleum fuels",
+      "Continuous batch testing with certified dispatch Certificate of Analysis (COA)"
     ],
-    image: "/images/ldo-substitute.jpg"
+    image: "/images/tyre-pyrolysis-oil.jpg"
   },
   {
-    id: "fo-substitute",
-    code: "OIL-FO-SUB",
-    name: "Furnace Oil (FO) Substitute",
-    badge: "Domestic Production",
-    subtitle: "Heavy industrial alternative to IOCL & BPCL Furnace Oil",
-    description: "A heavy-duty thermal fuel designed for large-scale industrial furnaces, high-capacity boilers, and forging units. Manufactured to deliver high radiant heat output, stable flame length, and consistent fluidity under preheated operation.",
+    id: "blended-fuel-oil",
+    code: "OIL-BFO-SERIES",
+    name: "Blended Fuel Oil",
+    badge: "Specialized Blending",
+    subtitle: "Engineered for Road Construction & Hot Mix Plants",
+    description: "Oilteq Industries manufactures and supplies Blended Fuel Oil for reliable performance in industrial heating applications, with a major focus on the road construction and Hot Mix Plant industry. The fuel is produced through controlled blending of suitable industrial fuel components to achieve consistent fuel characteristics, good calorific value and dependable combustion performance.",
     applications: [
-      "Steel Rolling Mills & Billet Reheating Furnaces",
-      "Heavy Industrial Boilers & Power Ancillaries",
-      "Aluminium Melting & Holding Furnaces",
-      "Ceramic Kilns & Refractory Sintering Units",
-      "Forging & Heat Treatment Facilities"
+      "Road Construction Hot Mix Plants",
+      "Bituminous & Asphalt Mix Production",
+      "Aggregate Drying Rotary Drums",
+      "Industrial Boilers & Heating Systems",
+      "Dependable Industrial Heat Generation"
     ],
     specifications: [
-      { parameter: "Gross Calorific Value (GCV)", standard: "9,800 – 10,200 kcal/kg", unit: "kcal/kg" },
-      { parameter: "Kinematic Viscosity @ 50°C", standard: "80 – 180 cSt", unit: "cSt" },
-      { parameter: "Density @ 15°C", standard: "0.920 – 0.980 g/cm³", unit: "g/cm³" },
-      { parameter: "Flash Point (Pensky-Martens)", standard: "> 66°C", unit: "°C" },
-      { parameter: "Sulphur Content", standard: "< 2.0% wt", unit: "% wt" },
-      { parameter: "Moisture Content", standard: "< 0.5% vol", unit: "% vol" },
-      { parameter: "Ash Content", standard: "< 0.08% wt", unit: "% wt" }
+      { parameter: "Gross Calorific Value (GCV)", standard: "9,900 – 10,400 kcal/kg", unit: "kcal/kg" },
+      { parameter: "Kinematic Viscosity @ 50°C", standard: "18 – 50 cSt", unit: "cSt" },
+      { parameter: "Density @ 15°C", standard: "0.890 – 0.940 g/cm³", unit: "g/cm³" },
+      { parameter: "Flash Point (PMCC)", standard: "> 66°C", unit: "°C" },
+      { parameter: "Sulphur Content", standard: "< 1.2% wt", unit: "% wt" },
+      { parameter: "Moisture Content", standard: "< 0.35% vol", unit: "% vol" },
+      { parameter: "Ash Content", standard: "< 0.04% wt", unit: "% wt" }
     ],
     advantages: [
-      "High calorific density for sustained furnace thermal soak",
-      "Stable viscosity curve minimizing line heating load",
-      "Consistent batch composition reducing furnace slagging",
-      "Compatible with existing heavy fuel preheating systems"
+      "Specially formulated for hot mix asphalt rotary drying drum burners",
+      "Dependable combustion performance with clean, sustained heat transfer",
+      "Consistent viscosity and density reducing burner nozzle wear and flame flutter",
+      "Controlled industrial blending meeting strict operational heating standards"
     ],
-    image: "/images/furnace-oil.jpg"
-  },
-  {
-    id: "imported-fuels",
-    code: "OIL-IMP-SERIES",
-    name: "Imported LDO & Furnace Oil",
-    badge: "Port Import & Storage",
-    subtitle: "High-grade imported industrial fuels with port terminal infrastructure",
-    description: "Directly imported high-specification fuel oils received through dedicated terminal infrastructure at key ports in Maharashtra and Gujarat. Backed by coastal storage tanks, automated laboratory verification, and bulk tanker fleet dispatch across industrial hubs.",
-    applications: [
-      "Large-scale Infrastructure Projects",
-      "Continuous-Process Chemical Plants",
-      "Multi-megawatt Captive Thermal Boilers",
-      "Western & Northern India Industrial Corridors",
-      "Coastal & Inland Manufacturing Clusters"
-    ],
-    specifications: [
-      { parameter: "Gross Calorific Value (GCV)", standard: "10,100 – 10,500 kcal/kg", unit: "kcal/kg" },
-      { parameter: "Kinematic Viscosity @ 50°C", standard: "Controlled to Grade (Custom)", unit: "cSt" },
-      { parameter: "Density @ 15°C", standard: "0.850 – 0.940 g/cm³", unit: "g/cm³" },
-      { parameter: "Flash Point", standard: "> 66°C", unit: "°C" },
-      { parameter: "Sulphur Content", standard: "Controlled (< 0.5% - 1.5% wt)", unit: "% wt" },
-      { parameter: "Moisture Content", standard: "< 0.20% vol", unit: "% vol" },
-      { parameter: "Sediment / Insoluble", standard: "< 0.05% wt", unit: "% wt" }
-    ],
-    advantages: [
-      "Import volume of ~6,000 MT per month ensuring steady supply",
-      "Strategic port access in Maharashtra & Gujarat for fast logistics",
-      "Stringent terminal QA testing before loading into transport tankers",
-      "Custom blending and viscosity matching on high-volume supply contracts"
-    ],
-    image: "/images/imported-fuel.jpg"
+    image: "/images/blended-fuel-oil.jpg"
   }
 ];
 
@@ -138,24 +109,24 @@ export const TEST_PARAMETERS = [
     icon: "Flame"
   },
   {
-    name: "Flash Point (PMCC / Abel)",
-    unit: "°C",
+    name: "Flash Point",
+    unit: "°C (Pensky-Martens / Abel)",
     testMethod: "ASTM D93 / ISO 2719",
-    significance: "Safety parameter guaranteeing safe storage, handling, pumping, and fire safety compliance in transport.",
+    significance: "Crucial regulatory safety parameter for storage temperature thresholds, transport classification, and burner safety.",
     icon: "ShieldAlert"
   },
   {
     name: "Sulphur Content",
     unit: "% by weight",
-    testMethod: "ASTM D4294 / XRF Analyzer",
-    significance: "Monitored to prevent boiler tube corrosion, acid dew point issues, and maintain metallurgical furnace integrity.",
-    icon: "Sliders"
+    testMethod: "ASTM D4294 / EDXRF",
+    significance: "Essential for SOx emissions compliance, refractory longevity, and cold-end corrosion prevention in flues.",
+    icon: "Filter"
   },
   {
     name: "Moisture Content",
     unit: "% by volume",
-    testMethod: "ASTM D95 / Dean-Stark Distillation",
-    significance: "Guaranteed low moisture prevents burner sputtering, flame instability, and heat loss due to water vaporization.",
+    testMethod: "ASTM D95 / Dean & Stark",
+    significance: "Prevents flame instability, spitting/splattering at burner tips, and loss of effective combustion enthalpy.",
     icon: "Droplets"
   },
   {
@@ -169,19 +140,19 @@ export const TEST_PARAMETERS = [
 
 export const INDUSTRIES = [
   {
-    id: "steel",
-    name: "Steel & Metallurgical",
-    description: "Reheating furnaces, ladle preheating, billet soaking pits, and forging operations requiring steady, high-temperature thermal curves.",
+    id: "steel-metals",
+    name: "Steel, Rolling Mills & Forging",
+    description: "Reheating furnaces, continuous annealing, billet heating, and forging operations requiring heavy radiant heat.",
     image: "/images/ind-steel.jpg",
-    keyProducts: ["Furnace Oil Substitute", "Imported Fuel Oils"],
-    stats: "Sustained 1100°C+ Flame"
+    keyProducts: ["Tyre Pyrolysis Oil — TPO", "Blended Fuel Oil"],
+    stats: "High Flame Stability"
   },
   {
     id: "aluminium",
     name: "Aluminium & Smelting",
     description: "Melting reverberatory furnaces, holding furnaces, and extrusion log heaters with controlled atmosphere requirements.",
     image: "/images/ind-aluminium.jpg",
-    keyProducts: ["LDO Substitute", "FO Substitute"],
+    keyProducts: ["Tyre Pyrolysis Oil — TPO"],
     stats: "Uniform Thermal Soak"
   },
   {
@@ -189,7 +160,7 @@ export const INDUSTRIES = [
     name: "Road Construction & Asphalt",
     description: "Continuous aggregate heating in Asphalt Hotmix drum units, bitumen heating tanks, and road surfacing plant boilers.",
     image: "/images/ind-road.jpg",
-    keyProducts: ["LDO Substitute"],
+    keyProducts: ["Blended Fuel Oil", "Tyre Pyrolysis Oil — TPO"],
     stats: "High Clean Burn / Low Clog"
   },
   {
@@ -197,7 +168,7 @@ export const INDUSTRIES = [
     name: "Boilers & Steam Generation",
     description: "Process steam generation for textiles, chemicals, paper, food processing, and district industrial heating networks.",
     image: "/images/ind-boilers.jpg",
-    keyProducts: ["FO Substitute", "LDO Substitute", "Imported FO"],
+    keyProducts: ["Tyre Pyrolysis Oil — TPO", "Blended Fuel Oil"],
     stats: "High Thermal Efficiency"
   },
   {
@@ -205,7 +176,7 @@ export const INDUSTRIES = [
     name: "Forgings & Heat Treatment",
     description: "Heavy forging furnaces, annealing ovens, and tempering lines demanding uniform furnace temperature distribution.",
     image: "/images/ind-forgings.jpg",
-    keyProducts: ["FO Substitute", "LDO Substitute"],
+    keyProducts: ["Tyre Pyrolysis Oil — TPO"],
     stats: "Accurate Atmosphere Control"
   },
   {
@@ -213,7 +184,7 @@ export const INDUSTRIES = [
     name: "Refractories & Ceramics",
     description: "High-temperature tunnel kilns and shuttle kilns firing firebricks, castables, and specialized ceramic components.",
     image: "/images/ind-refractories.jpg",
-    keyProducts: ["FO Substitute", "LDO Substitute"],
+    keyProducts: ["Tyre Pyrolysis Oil — TPO"],
     stats: "Consistent Sintering Curves"
   }
 ];
