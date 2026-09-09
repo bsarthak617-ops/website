@@ -11,6 +11,90 @@ const hotspotIcons = {
   'warehousing': Warehouse
 };
 
+const SUPPLY_ROUTES = [
+  {
+    id: 'uttarakhand',
+    name: 'Uttarakhand',
+    color: '#447381',
+    path: 'M 1535,1975 Q 1120,1670 1029,1113',
+    dx: 1029,
+    dy: 1113,
+    dur: 6.5
+  },
+  {
+    id: 'haryana',
+    name: 'Haryana',
+    color: '#767D45',
+    path: 'M 1535,1975 Q 1287,1453 787,1196',
+    dx: 787,
+    dy: 1196,
+    dur: 6.0
+  },
+  {
+    id: 'assam',
+    name: 'Assam',
+    color: '#4E7E8A',
+    path: 'M 1535,1975 Q 1904,1831 2120,1460',
+    dx: 2120,
+    dy: 1460,
+    dur: 5.5
+  },
+  {
+    id: 'jharkhand',
+    name: 'Jharkhand',
+    color: '#B99343',
+    path: 'M 1535,1975 Q 1581,1849 1532,1705',
+    dx: 1532,
+    dy: 1705,
+    dur: 4.5
+  },
+  {
+    id: 'madhya-pradesh',
+    name: 'Madhya Pradesh',
+    color: '#44727F',
+    path: 'M 1535,1975 Q 1287,1750 948,1718',
+    dx: 948,
+    dy: 1718,
+    dur: 5.8
+  },
+  {
+    id: 'west-bengal',
+    name: 'West Bengal',
+    color: '#893F4F',
+    path: 'M 1535,1975 Q 1669,1887 1717,1732',
+    dx: 1717,
+    dy: 1732,
+    dur: 4.2
+  },
+  {
+    id: 'gujarat',
+    name: 'Gujarat',
+    color: '#893E4E',
+    path: 'M 1535,1975 Q 993,1708 409,1818',
+    dx: 409,
+    dy: 1818,
+    dur: 7.0
+  },
+  {
+    id: 'maharashtra',
+    name: 'Maharashtra',
+    color: '#767D45',
+    path: 'M 1535,1975 Q 1120,1887 715,2073',
+    dx: 715,
+    dy: 2073,
+    dur: 6.2
+  },
+  {
+    id: 'tamil-nadu',
+    name: 'Tamil Nadu',
+    color: '#B99343',
+    path: 'M 1535,1975 Q 1106,2286 956,2770',
+    dx: 956,
+    dy: 2770,
+    dur: 6.8
+  }
+];
+
 export default function InfrastructureSection() {
   const [selectedSpot, setSelectedSpot] = useState(INFRASTRUCTURE_HOTSPOTS[0]);
 
@@ -35,60 +119,107 @@ export default function InfrastructureSection() {
 
         {/* Hotspots Grid / Interactive Map Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Left: Interactive Facility Hotspot Schematic */}
-          <div className="lg:col-span-7 relative bg-brand-bg-surface dark:bg-brand-bg-dark-surface border border-brand-border-light dark:border-brand-border-dark rounded-sm p-6 sm:p-8 flex flex-col justify-between overflow-hidden min-h-[420px]">
+          {/* Left: India Shipment Flow Map */}
+          <div className="lg:col-span-7 relative bg-brand-bg-surface dark:bg-brand-bg-dark-surface border border-brand-border-light dark:border-brand-border-dark rounded-sm p-4 sm:p-6 flex flex-col justify-between overflow-hidden min-h-[500px]">
             {/* Background Grid Linework */}
             <div className="absolute inset-0 technical-grid opacity-60 pointer-events-none" />
-            
-            {/* India Industrial Corridor Schematic Map (Stylized SVG Vector) */}
-            <div className="relative w-full h-72 sm:h-80 my-auto flex items-center justify-center">
-              <svg viewBox="0 0 500 400" className="w-full h-full stroke-brand-border-strong/50 dark:stroke-brand-border-subtle/70 fill-none">
-                {/* Stylized Geographic Corridor & Transit Routes */}
-                <path d="M120,180 L220,160 L330,190 L380,240 L310,290 L180,260 Z" strokeWidth="1" strokeDasharray="3 3" />
-                <path d="M140,210 Q240,180 340,200" strokeWidth="1.5" className="stroke-brand-gold/60" />
-                <path d="M140,240 Q250,220 340,200" strokeWidth="1.5" className="stroke-brand-teal/60" />
-                
-                {/* Port Nodes */}
-                <circle cx="140" cy="210" r="4" className="fill-brand-teal" />
-                <text x="100" y="200" className="text-[9px] fill-current text-brand-text-light-muted dark:text-brand-text-dark-muted font-mono">GUJARAT PORTS</text>
-                
-                <circle cx="140" cy="250" r="4" className="fill-brand-teal" />
-                <text x="75" y="265" className="text-[9px] fill-current text-brand-text-light-muted dark:text-brand-text-dark-muted font-mono">MAHARASHTRA PORTS</text>
 
-                {/* Odisha Manufacturing Center */}
-                <circle cx="340" cy="200" r="6" className="fill-brand-gold animate-pulse" />
-                <text x="320" y="180" className="text-[10px] font-bold fill-current text-brand-text-light dark:text-brand-text-dark font-mono">JHARSUGUDA (ODISHA)</text>
+            {/* India Shipment Flow Map Container */}
+            <div className="relative w-full aspect-[2619/3504] max-h-[640px] mx-auto flex items-center justify-center rounded-sm overflow-hidden bg-[#ECEADD] dark:bg-[#181A1B] border border-brand-border-light/60 dark:border-brand-border-dark/60 my-auto shadow-sm">
+              <img
+                src="/india-shipment-flow-map.png"
+                alt="India Shipment Flow & Regional Corridors"
+                className="w-full h-full object-contain select-none pointer-events-none"
+              />
+
+              {/* Exact Overlay SVG aligned 1:1 with the 2619 x 3504 coordinate system */}
+              <svg
+                viewBox="0 0 2619 3504"
+                className="absolute inset-0 w-full h-full pointer-events-none"
+                preserveAspectRatio="xMidYMid meet"
+              >
+                <defs>
+                  {/* Subtle Central Hub Radial Pulse */}
+                  <radialGradient id="odishaGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#A78B45" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#A78B45" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+
+                {/* Odisha Central Hub Pulse */}
+                <circle cx="1535" cy="1975" r="46" fill="url(#odishaGlow)">
+                  <animate attributeName="r" values="32;58;32" dur="3s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.7;0.15;0.7" dur="3s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="1535" cy="1975" r="32" fill="none" stroke="#A78B45" strokeWidth="4" opacity="0.6">
+                  <animate attributeName="r" values="24;44;24" dur="2.5s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2.5s" repeatCount="indefinite" />
+                </circle>
+
+                {/* 9 Supply Corridor Route Animations */}
+                {SUPPLY_ROUTES.map((route) => (
+                  <g key={route.id}>
+                    {/* Animated Outward Dashes flowing from Odisha to destination state */}
+                    <path
+                      d={route.path}
+                      fill="none"
+                      stroke={route.color}
+                      strokeWidth="10"
+                      strokeDasharray="14 28"
+                      strokeLinecap="round"
+                      opacity="0.9"
+                      className="animate-flow-outward"
+                      style={{ animationDuration: `${route.dur + 2}s` }}
+                    />
+
+                    {/* Smooth moving pulse bead moving along the route from Odisha outward */}
+                    <circle r="14" fill={route.color} opacity="0.85">
+                      <animateMotion
+                        path={route.path}
+                        dur={`${route.dur}s`}
+                        repeatCount="indefinite"
+                        keyPoints="0;1"
+                        keyTimes="0;1"
+                      />
+                    </circle>
+
+                    {/* Secondary Staggered Pulse Bead */}
+                    <circle r="10" fill={route.color} opacity="0.65">
+                      <animateMotion
+                        path={route.path}
+                        dur={`${route.dur}s`}
+                        begin={`${route.dur / 2}s`}
+                        repeatCount="indefinite"
+                        keyPoints="0;1"
+                        keyTimes="0;1"
+                      />
+                    </circle>
+
+                    {/* Subtle Destination Arrival Ripple */}
+                    <circle
+                      cx={route.dx}
+                      cy={route.dy}
+                      r="26"
+                      fill="none"
+                      stroke={route.color}
+                      strokeWidth="3.5"
+                      opacity="0.45"
+                    >
+                      <animate attributeName="r" values="18;34;18" dur="3.2s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.6;0.15;0.6" dur="3.2s" repeatCount="indefinite" />
+                    </circle>
+                  </g>
+                ))}
               </svg>
-
-              {/* Clickable Hotspot Pins */}
-              {INFRASTRUCTURE_HOTSPOTS.map((spot) => {
-                const Icon = hotspotIcons[spot.id] || MapPin;
-                const isSelected = selectedSpot.id === spot.id;
-                return (
-                  <button
-                    key={spot.id}
-                    onClick={() => setSelectedSpot(spot)}
-                    style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
-                    className={`absolute -translate-x-1/2 -translate-y-1/2 p-2 rounded-full border transition-all duration-300 group z-10 ${
-                      isSelected
-                        ? 'bg-brand-charcoal text-white border-brand-gold scale-125 shadow-lg'
-                        : 'bg-brand-bg-light dark:bg-brand-bg-dark text-brand-text-light dark:text-brand-text-dark border-brand-border-light dark:border-brand-border-dark hover:border-brand-gold'
-                    }`}
-                    title={spot.title}
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                    {isSelected && (
-                      <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-brand-gold animate-ping" />
-                    )}
-                  </button>
-                );
-              })}
             </div>
 
             {/* Bottom Map Note */}
             <div className="relative z-10 pt-4 border-t border-brand-border-light dark:border-brand-border-dark flex items-center justify-between text-xs font-mono text-brand-text-light-subtle dark:text-brand-text-dark-subtle">
-              <span>SELECT A NODE TO INSPECT ASSETS</span>
-              <span className="text-brand-gold">5 ACTIVE STRATEGIC NODES</span>
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-brand-gold animate-pulse" />
+                ODISHA DISPATCH TO REGIONAL HUBS
+              </span>
+              <span className="text-brand-gold font-bold">9 ACTIVE SUPPLY CORRIDORS</span>
             </div>
           </div>
 

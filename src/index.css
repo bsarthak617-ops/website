@@ -51,6 +51,20 @@ html {
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
+/* Flowing Shipment Route Animation */
+@keyframes flowOutward {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 400;
+  }
+}
+
+.animate-flow-outward {
+  animation: flowOutward 8s linear infinite;
+}
+
 /* Subtle Film Grain */
 .grain-overlay {
   background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 0);
