@@ -125,5 +125,9 @@ dist
 .DS_Store
 *.pem
 
-# Stray uploaded screenshots
+# Stray uploaded screenshots & raw video sources in root
 ChatGPT Image*
+Truck_animation*
+india-shipment-flow-map.png
+scratch_frames/
+temp_frames/
