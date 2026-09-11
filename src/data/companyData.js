@@ -21,37 +21,37 @@ export const COMPANY_INFO = {
 
 export const PRODUCTS = [
   {
-    id: "tyre-pyrolysis-oil",
-    code: "OIL-TPO-PRO",
-    name: "Tyre Pyrolysis Oil — TPO",
-    badge: "Alternative Industrial Fuel",
-    subtitle: "High Calorific Value Alternative Fuel from Pyrolysis",
-    description: "Tyre Pyrolysis Oil is an alternative industrial fuel derived from the pyrolysis of end-of-life tyres. With a high calorific value and controlled quality parameters, TPO offers an effective fuel solution for a range of industrial heating applications.",
+    id: "batch-plant-fuel",
+    code: "OIL-BPF-PRO",
+    name: "Batch Plant Fuel",
+    badge: "Industrial Heating Fuel",
+    subtitle: "High Calorific Value Fuel for Asphalt & Concrete Batch Plants",
+    description: "Batch Plant Fuel is an engineered industrial heating fuel tailored for hot-mix asphalt batching plants, concrete batching, industrial boilers, and burner operations. With a high calorific value and controlled quality parameters, it delivers clean, stable combustion and cost-effective thermal efficiency.",
     applications: [
+      "Hot-Mix Asphalt Plants",
+      "Concrete Batching Facilities",
       "Industrial Boilers",
       "Thermic Fluid Heaters",
-      "Furnaces",
-      "Kilns",
-      "Hot-Mix Plants",
+      "Furnaces & Kilns",
       "Industrial Heating Systems",
       "Other compatible fuel-fired applications"
     ],
     specifications: [
-      { parameter: "Gross Calorific Value (GCV)", standard: "10,200 – 10,600 kcal/kg", unit: "kcal/kg" },
-      { parameter: "Kinematic Viscosity @ 40°C", standard: "3.2 – 8.0 cSt", unit: "cSt" },
-      { parameter: "Density @ 15°C", standard: "0.910 – 0.950 g/cm³", unit: "g/cm³" },
+      { parameter: "Gross Calorific Value (GCV)", standard: "10,000+ kcal/kg", unit: "kcal/kg" },
+      { parameter: "Kinematic Viscosity @ 40°C", standard: "5 cSt", unit: "cSt" },
+      { parameter: "Density @ 15°C", standard: "0.90 – 0.92 g/cm³", unit: "g/cm³" },
       { parameter: "Flash Point (Abel / PMCC)", standard: "> 50°C", unit: "°C" },
-      { parameter: "Sulphur Content", standard: "< 1.0% wt", unit: "% wt" },
+      { parameter: "Sulphur Content", standard: "< 0.3% wt", unit: "% wt" },
       { parameter: "Moisture Content", standard: "< 0.40% vol", unit: "% vol" },
       { parameter: "Ash Content", standard: "< 0.05% wt", unit: "% wt" }
     ],
     advantages: [
-      "Sustainable industrial fuel from circular end-of-life tyre recovery",
+      "Optimized flame geometry for aggregate drying drums and batching burners",
       "High calorific energy output providing rapid, stable thermal soak",
       "Economical heating cost per ton compared to conventional petroleum fuels",
       "Continuous batch testing with certified dispatch Certificate of Analysis (COA)"
     ],
-    image: "/images/tyre-pyrolysis-oil.jpg"
+    image: "/images/batch-plant-fuel.jpg"
   },
   {
     id: "blended-fuel-oil",
@@ -59,7 +59,7 @@ export const PRODUCTS = [
     name: "Blended Fuel Oil",
     badge: "Specialized Blending",
     subtitle: "Engineered for Road Construction & Hot Mix Plants",
-    description: "Oilteq Industries manufactures and supplies Blended Fuel Oil for reliable performance in industrial heating applications, with a major focus on the road construction and Hot Mix Plant industry. The fuel is produced through controlled blending of suitable industrial fuel components to achieve consistent fuel characteristics, good calorific value and dependable combustion performance.",
+    description: "Blended Fuel Oil is engineered for reliable performance across industrial heating applications, with dedicated formulation for road construction and Hot Mix Plants. Controlled blending of industrial fuel components ensures consistent combustion, high calorific value, and stable burner operation.",
     applications: [
       "Road Construction Hot Mix Plants",
       "Bituminous & Asphalt Mix Production",
@@ -68,11 +68,11 @@ export const PRODUCTS = [
       "Dependable Industrial Heat Generation"
     ],
     specifications: [
-      { parameter: "Gross Calorific Value (GCV)", standard: "9,900 – 10,400 kcal/kg", unit: "kcal/kg" },
-      { parameter: "Kinematic Viscosity @ 50°C", standard: "18 – 50 cSt", unit: "cSt" },
-      { parameter: "Density @ 15°C", standard: "0.890 – 0.940 g/cm³", unit: "g/cm³" },
-      { parameter: "Flash Point (PMCC)", standard: "> 66°C", unit: "°C" },
-      { parameter: "Sulphur Content", standard: "< 1.2% wt", unit: "% wt" },
+      { parameter: "Gross Calorific Value (GCV)", standard: "9,500 – 9,900 kcal/kg", unit: "kcal/kg" },
+      { parameter: "Kinematic Viscosity @ 40°C", standard: "5 cSt", unit: "cSt" },
+      { parameter: "Density @ 15°C", standard: "0.89 – 0.91 g/cm³", unit: "g/cm³" },
+      { parameter: "Flash Point (PMCC)", standard: "> 45°C", unit: "°C" },
+      { parameter: "Sulphur Content", standard: "< 0.3% wt", unit: "% wt" },
       { parameter: "Moisture Content", standard: "< 0.35% vol", unit: "% vol" },
       { parameter: "Ash Content", standard: "< 0.04% wt", unit: "% wt" }
     ],
@@ -140,11 +140,19 @@ export const TEST_PARAMETERS = [
 
 export const INDUSTRIES = [
   {
+    id: "road-construction",
+    name: "Road Construction & Asphalt",
+    description: "Continuous aggregate heating in Asphalt Hotmix drum units, bitumen heating tanks, and road surfacing plant boilers.",
+    image: "/images/ind-road.jpg",
+    keyProducts: ["Blended Fuel Oil", "Batch Plant Fuel"],
+    stats: "High Clean Burn / Low Clog"
+  },
+  {
     id: "steel-metals",
     name: "Steel, Rolling Mills & Forging",
     description: "Reheating furnaces, continuous annealing, billet heating, and forging operations requiring heavy radiant heat.",
     image: "/images/ind-steel.jpg",
-    keyProducts: ["Tyre Pyrolysis Oil — TPO", "Blended Fuel Oil"],
+    keyProducts: ["Batch Plant Fuel", "Blended Fuel Oil"],
     stats: "High Flame Stability"
   },
   {
@@ -152,23 +160,15 @@ export const INDUSTRIES = [
     name: "Aluminium & Smelting",
     description: "Melting reverberatory furnaces, holding furnaces, and extrusion log heaters with controlled atmosphere requirements.",
     image: "/images/ind-aluminium.jpg",
-    keyProducts: ["Tyre Pyrolysis Oil — TPO"],
+    keyProducts: ["Batch Plant Fuel"],
     stats: "Uniform Thermal Soak"
-  },
-  {
-    id: "road-construction",
-    name: "Road Construction & Asphalt",
-    description: "Continuous aggregate heating in Asphalt Hotmix drum units, bitumen heating tanks, and road surfacing plant boilers.",
-    image: "/images/ind-road.jpg",
-    keyProducts: ["Blended Fuel Oil", "Tyre Pyrolysis Oil — TPO"],
-    stats: "High Clean Burn / Low Clog"
   },
   {
     id: "boilers",
     name: "Boilers & Steam Generation",
     description: "Process steam generation for textiles, chemicals, paper, food processing, and district industrial heating networks.",
     image: "/images/ind-boilers.jpg",
-    keyProducts: ["Tyre Pyrolysis Oil — TPO", "Blended Fuel Oil"],
+    keyProducts: ["Batch Plant Fuel", "Blended Fuel Oil"],
     stats: "High Thermal Efficiency"
   },
   {
@@ -176,7 +176,7 @@ export const INDUSTRIES = [
     name: "Forgings & Heat Treatment",
     description: "Heavy forging furnaces, annealing ovens, and tempering lines demanding uniform furnace temperature distribution.",
     image: "/images/ind-forgings.jpg",
-    keyProducts: ["Tyre Pyrolysis Oil — TPO"],
+    keyProducts: ["Batch Plant Fuel"],
     stats: "Accurate Atmosphere Control"
   },
   {
@@ -184,7 +184,7 @@ export const INDUSTRIES = [
     name: "Refractories & Ceramics",
     description: "High-temperature tunnel kilns and shuttle kilns firing firebricks, castables, and specialized ceramic components.",
     image: "/images/ind-refractories.jpg",
-    keyProducts: ["Tyre Pyrolysis Oil — TPO"],
+    keyProducts: ["Batch Plant Fuel"],
     stats: "Consistent Sintering Curves"
   }
 ];
@@ -239,7 +239,7 @@ export const INFRASTRUCTURE_HOTSPOTS = [
     location: "Jharsuguda, Odisha",
     capacity: "6,000 MT / month",
     details: "Equipped with automated process reactors, condensation units, industrial pumps, multi-stage filtration, and comprehensive process instrumentation.",
-    image: "/hero-refinery.jpg",
+    image: "/images/jharsuguda-plant.jpg",
     x: 62,
     y: 48,
   },
@@ -249,7 +249,7 @@ export const INFRASTRUCTURE_HOTSPOTS = [
     location: "Odisha & Maharashtra",
     capacity: "Batch-wise COA Testing",
     details: "Full laboratory instrumentation for testing flash point, viscosity, density, calorific value, moisture, ash, and sulfur content before tanker release.",
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
+    image: "/images/process-03-lab.jpg",
     x: 58,
     y: 54,
   },
@@ -259,7 +259,7 @@ export const INFRASTRUCTURE_HOTSPOTS = [
     location: "Maharashtra & Gujarat Ports",
     capacity: "~6,000 MT / month imports",
     details: "Strategically located port storage and receiving infrastructure supporting swift customs clearing, quality sampling, and regional distribution.",
-    image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80",
+    image: "/images/imported-fuel.jpg",
     x: 28,
     y: 52,
   },
@@ -269,7 +269,7 @@ export const INFRASTRUCTURE_HOTSPOTS = [
     location: "Nationwide Movement",
     capacity: "Multi-tonnage Tankers",
     details: "Company-managed petroleum road tankers with tamper-evident seals and digital tracking, guaranteeing transit purity from dispatch to plant gate.",
-    image: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80",
+    image: "/images/tanker-truck.jpg",
     x: 46,
     y: 60,
   },
@@ -279,7 +279,7 @@ export const INFRASTRUCTURE_HOTSPOTS = [
     location: "Strategic Industrial Hubs",
     capacity: "Buffer Reserve Capacity",
     details: "Strategically placed bulk storage reservoirs guaranteeing uninterrupted supply during peak manufacturing demands and seasonal road construction surges.",
-    image: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80",
+    image: "/images/regional-storage.jpg",
     x: 52,
     y: 42,
   }

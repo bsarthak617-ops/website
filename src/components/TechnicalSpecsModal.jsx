@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PRODUCTS, TEST_PARAMETERS } from '../data/companyData';
 import { X, FileText, Check, Download, ShieldCheck, Printer, ArrowUpRight } from 'lucide-react';
 
-export default function TechnicalSpecsModal({ isOpen, onClose, onSelectQuote }) {
+export default function TechnicalSpecsModal({ isOpen, onClose, onSelectQuote, initialProduct }) {
   const [activeProductTab, setActiveProductTab] = useState(PRODUCTS[0].id);
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (initialProduct && isOpen) {
+      const match = PRODUCTS.find(
+        (p) =>
+          p.id === initialProduct ||
+          p.id.toLowerCase() === String(initialProduct).toLowerCase() ||
+          p.name.toLowerCase() === String(initialProduct).toLowerCase() ||
+          String(initialProduct).toLowerCase().includes(p.name.toLowerCase()) ||
+          p.name.toLowerCase().includes(String(initialProduct).toLowerCase())
+      );
+      if (match) {
+        setActiveProductTab(match.id);
+      }
+    }
+  }, [initialProduct, isOpen]);
 
   if (!isOpen) return null;
 

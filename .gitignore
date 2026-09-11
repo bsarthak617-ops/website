@@ -131,3 +131,7 @@ Truck_animation*
 india-shipment-flow-map.png
 scratch_frames/
 temp_frames/
+*.mp4
+generate_*.py
+dist/
+terminal-reference/

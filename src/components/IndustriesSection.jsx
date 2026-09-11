@@ -10,19 +10,13 @@ export default function IndustriesSection({ onSelectIndustryQuote }) {
     <section id="industries" className="py-24 px-4 sm:px-6 lg:px-8 border-t border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark gap-4">
-          <div>
-            <span className="tech-label text-brand-gold dark:text-brand-gold-light">03 / APPLICATION SECTORS</span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-brand-text-light dark:text-brand-text-dark mt-2">
-              BUILT FOR ENERGY-INTENSIVE INDUSTRIES.
-            </h2>
-            <p className="text-sm sm:text-base text-brand-text-light-muted dark:text-brand-text-dark-muted mt-2 max-w-xl">
-              Engineered fuels formulated to sustain critical continuous combustion environments without flame fluctuations.
-            </p>
-          </div>
-          <span className="tech-label text-brand-text-light-subtle dark:text-brand-text-dark-subtle self-start md:self-end font-mono">
-            SECTORS SERVED: 08+
-          </span>
+        <div className="mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark">
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-brand-text-light dark:text-brand-text-dark">
+            BUILT FOR ENERGY-INTENSIVE INDUSTRIES.
+          </h2>
+          <p className="text-sm sm:text-base text-brand-text-light-muted dark:text-brand-text-dark-muted mt-2 max-w-xl">
+            Engineered fuels formulated to sustain critical continuous combustion environments without flame fluctuations.
+          </p>
         </div>
 
         {/* Interactive Industry Matrix */}
@@ -63,20 +57,6 @@ export default function IndustriesSection({ onSelectIndustryQuote }) {
 
                 {/* Card Header */}
                 <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className={`tech-label font-mono ${
-                      isHovered ? 'text-brand-gold-light' : 'text-brand-text-light-subtle dark:text-brand-text-dark-subtle'
-                    }`}>
-                      SECTOR 0{idx + 1}
-                    </span>
-                    <span className={`px-2 py-0.5 text-[10px] font-mono border rounded-sm ${
-                      isHovered
-                        ? 'bg-black/60 border-brand-gold/50 text-brand-gold-light'
-                        : 'bg-brand-bg-surface dark:bg-brand-bg-dark-surface border-brand-border-light dark:border-brand-border-dark text-brand-gold'
-                    }`}>
-                      {ind.stats}
-                    </span>
-                  </div>
 
                   <h3 className={`text-xl font-bold tracking-tight transition-colors duration-200 ${
                     isHovered ? 'text-white' : 'text-brand-text-light dark:text-brand-text-dark'

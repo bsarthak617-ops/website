@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Truck, ShieldCheck, CheckCircle2, ArrowRight, Gauge, Anchor, Building2 } from 'lucide-react';
 
 export default function LogisticsSection() {
   const [activeStep, setActiveStep] = useState(2);
+  const sectionRef = useRef(null);
 
   const steps = [
     {
@@ -44,7 +45,11 @@ export default function LogisticsSection() {
   ];
 
   return (
-    <section id="logistics" className="py-24 px-4 sm:px-6 lg:px-8 border-t border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface relative">
+    <section
+      ref={sectionRef}
+      id="logistics"
+      className="py-24 px-4 sm:px-6 lg:px-8 border-t border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface relative"
+    >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark gap-4">

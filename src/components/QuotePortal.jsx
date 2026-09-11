@@ -11,7 +11,7 @@ export default function QuotePortal({ selectedProduct, selectedIndustry, onOpenS
     country: 'India',
     email: '',
     phone: '',
-    product: selectedProduct || 'Tyre Pyrolysis Oil — TPO',
+    product: selectedProduct || 'Batch Plant Fuel',
     application: selectedIndustry || 'Hotmix Asphalt Plants',
     quantityMT: 100,
     deliveryLocation: '',
@@ -59,7 +59,7 @@ export default function QuotePortal({ selectedProduct, selectedIndustry, onOpenS
       country: 'India',
       email: '',
       phone: '',
-      product: 'Tyre Pyrolysis Oil — TPO',
+      product: 'Batch Plant Fuel',
       application: 'Hotmix Asphalt Plants',
       quantityMT: 100,
       deliveryLocation: '',
@@ -71,19 +71,13 @@ export default function QuotePortal({ selectedProduct, selectedIndustry, onOpenS
     <section id="quote" className="py-24 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark gap-4">
-          <div>
-            <span className="tech-label text-brand-gold dark:text-brand-gold-light">10 / PROCUREMENT INQUIRY</span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-brand-text-light dark:text-brand-text-dark mt-2">
-              LET'S TALK ABOUT YOUR FUEL REQUIREMENT.
-            </h2>
-            <p className="text-sm sm:text-base text-brand-text-light-muted dark:text-brand-text-dark-muted mt-2 max-w-xl">
-              Share your fuel specification requirement, application, volume, and delivery destination for a customized commercial quotation.
-            </p>
-          </div>
-          <span className="tech-label text-brand-text-light-subtle dark:text-brand-text-dark-subtle self-start md:self-end font-mono">
-            COMMERCIAL RESPONSE: SAME-DAY
-          </span>
+        <div className="mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark">
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-brand-text-light dark:text-brand-text-dark">
+            LET'S TALK ABOUT YOUR FUEL REQUIREMENT.
+          </h2>
+          <p className="text-sm sm:text-base text-brand-text-light-muted dark:text-brand-text-dark-muted mt-2 max-w-xl">
+            Share your fuel specification requirement, application, volume, and delivery destination for a customized commercial quotation.
+          </p>
         </div>
 
         {/* Procurement Form / Submission Card */}
@@ -96,7 +90,7 @@ export default function QuotePortal({ selectedProduct, selectedIndustry, onOpenS
                   STEP 01: FUEL SPECIFICATION & VOLUME
                 </span>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                   {PRODUCTS.map((prod) => (
                     <div
                       key={prod.id}
@@ -335,7 +329,7 @@ export default function QuotePortal({ selectedProduct, selectedIndustry, onOpenS
 
               <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
                 <button
-                  onClick={onOpenSpecs}
+                  onClick={() => onOpenSpecs(formData.product)}
                   className="px-4 py-2 text-xs font-semibold uppercase tracking-wider border border-brand-border-light dark:border-brand-border-dark hover:border-brand-gold text-brand-text-light dark:text-brand-text-dark rounded-sm flex items-center gap-2"
                 >
                   <FileText className="w-3.5 h-3.5 text-brand-teal" />

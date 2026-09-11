@@ -1,15 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { GROUP_BUSINESSES } from '../data/companyData';
-import { Layers, Fuel, Truck, Compass, Shield, CheckCircle2, Factory } from 'lucide-react';
-
-const iconMap = {
-  Layers: Layers,
-  Fuel: Fuel,
-  Truck: Truck,
-  Compass: Compass,
-  Shield: Shield
-};
+import { CheckCircle2 } from 'lucide-react';
 
 export default function AboutSection() {
   return (
@@ -29,7 +19,7 @@ export default function AboutSection() {
         </div>
 
         {/* 2-Column Editorial Narrative */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Left Column */}
           <div className="lg:col-span-6 space-y-6">
             <p className="text-lg sm:text-xl font-medium text-brand-text-light dark:text-brand-text-dark leading-relaxed">
@@ -84,43 +74,6 @@ export default function AboutSection() {
               <span>LAT/LONG: 21.8554° N, 84.0062° E</span>
               <span>STATE: ODISHA, INDIA</span>
             </div>
-          </div>
-        </div>
-
-        {/* Group Strength & Allied Capabilities */}
-        <div className="pt-12 border-t border-brand-border-light dark:border-brand-border-dark">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-2">
-            <div>
-              <span className="tech-label text-brand-text-light-subtle dark:text-brand-text-dark-subtle">INTEGRATED ECOSYSTEM</span>
-              <h3 className="text-xl sm:text-2xl font-bold text-brand-text-light dark:text-brand-text-dark mt-1">
-                Allied Group Capabilities
-              </h3>
-            </div>
-            <p className="text-xs text-brand-text-light-muted dark:text-brand-text-dark-muted max-w-md">
-              Oilteq is supported by a comprehensive energy and infrastructure group with multi-sector assets.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {GROUP_BUSINESSES.map((group, idx) => {
-              const IconComp = iconMap[group.icon] || Factory;
-              return (
-                <div
-                  key={idx}
-                  className="p-5 border border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface hover:border-brand-gold dark:hover:border-brand-gold transition-colors duration-200 rounded-sm"
-                >
-                  <div className="w-8 h-8 rounded-sm bg-brand-bg-light dark:bg-brand-bg-dark border border-brand-border-light dark:border-brand-border-dark flex items-center justify-center mb-3">
-                    <IconComp className="w-4 h-4 text-brand-gold" />
-                  </div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-brand-text-light dark:text-brand-text-dark mb-1.5">
-                    {group.title}
-                  </h4>
-                  <p className="text-xs text-brand-text-light-muted dark:text-brand-text-dark-muted leading-relaxed">
-                    {group.description}
-                  </p>
-                </div>
-              );
-            })}
           </div>
         </div>
       </div>

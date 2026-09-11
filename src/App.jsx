@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import AboutSection from './components/AboutSection';
+import HeroLanding from './components/HeroLanding';
 import MetricsSection from './components/MetricsSection';
 import ProductsSection from './components/ProductsSection';
 import IndustriesSection from './components/IndustriesSection';
 import ManufacturingSection from './components/ManufacturingSection';
-import InfrastructureSection from './components/InfrastructureSection';
-import LogisticsSection from './components/LogisticsSection';
 import GlobalSection from './components/GlobalSection';
 import QuotePortal from './components/QuotePortal';
 import Footer from './components/Footer';
@@ -17,7 +15,8 @@ export default function App() {
   // Default to Light Mode as per user preference (#EEECE3 base)
   const [isDark, setIsDark] = useState(false);
   const [isSpecsOpen, setIsSpecsOpen] = useState(false);
-  const [selectedQuoteProduct, setSelectedQuoteProduct] = useState('Tyre Pyrolysis Oil — TPO');
+  const [selectedSpecsProduct, setSelectedSpecsProduct] = useState('batch-plant-fuel');
+  const [selectedQuoteProduct, setSelectedQuoteProduct] = useState('Batch Plant Fuel');
   const [selectedQuoteIndustry, setSelectedQuoteIndustry] = useState('Hotmix Asphalt Plants');
 
   useEffect(() => {
@@ -27,6 +26,13 @@ export default function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [isDark]);
+
+  const handleOpenSpecs = (productIdOrName) => {
+    if (productIdOrName) {
+      setSelectedSpecsProduct(productIdOrName);
+    }
+    setIsSpecsOpen(true);
+  };
 
   const handleOpenQuote = (productName, industryName) => {
     if (productName) setSelectedQuoteProduct(productName);
@@ -59,7 +65,7 @@ export default function App() {
       <Navbar
         isDark={isDark}
         setIsDark={setIsDark}
-        onOpenSpecs={() => setIsSpecsOpen(true)}
+        onOpenSpecs={() => handleOpenSpecs('batch-plant-fuel')}
         onOpenQuote={() => handleOpenQuote()}
       />
 
@@ -67,15 +73,18 @@ export default function App() {
       <main>
         <Hero
           onOpenQuote={() => handleOpenQuote()}
-          onOpenSpecs={() => setIsSpecsOpen(true)}
+          onOpenSpecs={() => handleOpenSpecs('batch-plant-fuel')}
         />
-
-        <AboutSection />
 
         <MetricsSection />
 
+        <HeroLanding
+          onOpenQuote={() => handleOpenQuote()}
+          onOpenSpecs={() => handleOpenSpecs('batch-plant-fuel')}
+        />
+
         <ProductsSection
-          onOpenSpecs={() => setIsSpecsOpen(true)}
+          onOpenSpecs={handleOpenSpecs}
           onSelectProductQuote={handleSelectProductQuote}
         />
 
@@ -85,10 +94,6 @@ export default function App() {
 
         <ManufacturingSection />
 
-        <InfrastructureSection />
-
-        <LogisticsSection />
-
         <GlobalSection
           onOpenQuote={() => handleOpenQuote()}
         />
@@ -96,13 +101,13 @@ export default function App() {
         <QuotePortal
           selectedProduct={selectedQuoteProduct}
           selectedIndustry={selectedQuoteIndustry}
-          onOpenSpecs={() => setIsSpecsOpen(true)}
+          onOpenSpecs={handleOpenSpecs}
         />
       </main>
 
       {/* Footer */}
       <Footer
-        onOpenSpecs={() => setIsSpecsOpen(true)}
+        onOpenSpecs={() => handleOpenSpecs('batch-plant-fuel')}
         onOpenQuote={() => handleOpenQuote()}
       />
 
@@ -110,6 +115,7 @@ export default function App() {
       <TechnicalSpecsModal
         isOpen={isSpecsOpen}
         onClose={() => setIsSpecsOpen(false)}
+        initialProduct={selectedSpecsProduct}
         onSelectQuote={(prodName) => handleSelectProductQuote(prodName)}
       />
     </div>

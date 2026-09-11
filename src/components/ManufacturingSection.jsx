@@ -10,22 +10,13 @@ export default function ManufacturingSection() {
     <section id="manufacturing" className="py-24 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark gap-4">
-          <div>
-            <span className="tech-label text-brand-gold dark:text-brand-gold-light">04 / REFINING & MANUFACTURING</span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-brand-text-light dark:text-brand-text-dark mt-2">
-              FROM PROCESSING TO DISPATCH.
-            </h2>
-            <p className="text-sm sm:text-base text-brand-text-light-muted dark:text-brand-text-dark-muted mt-2 max-w-xl">
-              Systematic 5-stage manufacturing lifecycle engineered across 3 facilities in Jharsuguda, Odisha.
-            </p>
-          </div>
-          <div className="text-right self-start md:self-end">
-            <span className="tech-label text-brand-teal block">ODISHA MANUFACTURING CLUSTER</span>
-            <span className="text-xs font-mono text-brand-text-light dark:text-brand-text-dark font-bold">
-              6,000 MT / MONTH ACTIVE RUN-RATE
-            </span>
-          </div>
+        <div className="mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark">
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-brand-text-light dark:text-brand-text-dark">
+            FROM PROCESSING TO DISPATCH.
+          </h2>
+          <p className="text-sm sm:text-base text-brand-text-light-muted dark:text-brand-text-dark-muted mt-2 max-w-xl">
+            Systematic 5-stage manufacturing lifecycle engineered across 3 facilities in Jharsuguda, Odisha.
+          </p>
         </div>
 
         {/* Process Steps Bar */}
@@ -68,14 +59,6 @@ export default function ManufacturingSection() {
             {/* Left: Detail Narrative */}
             <div className="lg:col-span-6 flex flex-col justify-between space-y-6">
               <div>
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="tech-label text-brand-gold px-2.5 py-1 bg-brand-gold/10 border border-brand-gold/20 rounded-sm">
-                    STAGE {MANUFACTURING_STAGES[activeStage].number} OF 05
-                  </span>
-                  <span className="tech-label text-brand-text-light-muted dark:text-brand-text-dark-muted">
-                    {MANUFACTURING_STAGES[activeStage].step}
-                  </span>
-                </div>
 
                 <h3 className="text-2xl sm:text-3xl font-extrabold text-brand-text-light dark:text-brand-text-dark tracking-tight mb-4">
                   {MANUFACTURING_STAGES[activeStage].title}

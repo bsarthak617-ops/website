@@ -6,37 +6,32 @@ export default function MetricsSection() {
     {
       value: "6,000",
       unit: "MT",
-      label: "MONTHLY MANUFACTURING CAPACITY",
-      detail: "Across 3 production units in Jharsuguda, Odisha"
+      label: "MONTHLY MANUFACTURING CAPACITY"
     },
     {
       value: "3",
       unit: "UNITS",
-      label: "MANUFACTURING FACILITIES",
-      detail: "Automated reactors, condensation & distillation systems"
+      label: "MANUFACTURING FACILITIES"
     },
     {
       value: "6,000",
       unit: "MT",
-      label: "MONTHLY IMPORT VOLUME",
-      detail: "Port terminal sourcing via Maharashtra & Gujarat"
+      label: "MONTHLY IMPORT VOLUME"
     },
     {
       value: "2",
       unit: "QA LABS",
-      label: "IN-HOUSE TESTING LABORATORIES",
-      detail: "Odisha & Maharashtra testing facilities"
+      label: "IN-HOUSE TESTING LABORATORIES"
     },
     {
       value: "24/7",
       unit: "AVAILABILITY",
-      label: "WAREHOUSING & LOGISTICS SUPPORT",
-      detail: "Dedicated tanker fleet & buffer reserves"
+      label: "WAREHOUSING & LOGISTICS SUPPORT"
     }
   ];
 
   return (
-    <section className="border-y border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface py-16 px-4 sm:px-6 lg:px-8">
+    <section className="border-y border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-brand-border-light dark:divide-brand-border-dark">
           {metrics.map((item, idx) => (
@@ -46,27 +41,19 @@ export default function MetricsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="py-6 sm:py-2 px-4 sm:px-6 first:pl-0 last:pr-0 flex flex-col justify-between"
+              className="py-6 sm:py-2 px-4 sm:px-6 first:pl-0 last:pr-0"
             >
-              <div>
-                <span className="tech-label text-brand-text-light-subtle dark:text-brand-text-dark-subtle block mb-2">
-                  METRIC 0{idx + 1}
+              <div className="flex items-baseline gap-1.5 mb-2">
+                <span className="text-4xl lg:text-5xl font-extrabold tracking-tightest text-brand-text-light dark:text-brand-text-dark font-sans">
+                  {item.value}
                 </span>
-                <div className="flex items-baseline gap-1.5 mb-2">
-                  <span className="text-4xl lg:text-5xl font-extrabold tracking-tightest text-brand-text-light dark:text-brand-text-dark font-sans">
-                    {item.value}
-                  </span>
-                  <span className="text-xs font-mono font-bold text-brand-gold">
-                    {item.unit}
-                  </span>
-                </div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-brand-text-light dark:text-brand-text-dark mb-1">
-                  {item.label}
-                </h4>
+                <span className="text-xs font-mono font-bold text-brand-gold">
+                  {item.unit}
+                </span>
               </div>
-              <p className="text-[11px] text-brand-text-light-muted dark:text-brand-text-dark-muted mt-2 border-t border-brand-border-light/60 dark:border-brand-border-dark/60 pt-2 font-mono">
-                {item.detail}
-              </p>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-brand-text-light dark:text-brand-text-dark">
+                {item.label}
+              </h4>
             </motion.div>
           ))}
         </div>
