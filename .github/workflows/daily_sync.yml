@@ -1,0 +1,53 @@
+name: WheelsEye Daily 8:00 AM Cloud Sync
+
+on:
+  schedule:
+    # 8:00 AM IST is 02:30 AM UTC
+    - cron: '30 2 * * *'
+  workflow_dispatch:
+    inputs:
+      target_date:
+        description: 'Target Date (DD/MM/YYYY) - Defaults to yesterday'
+        required: false
+        default: ''
+
+jobs:
+  wheelseye-sync:
+    name: Extract Telemetry & Push to Google Sheets
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: "OILTEQ wheels eye"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Playwright Browsers & OS Dependencies
+        run: |
+          python -m playwright install --with-deps chromium
+
+      - name: Execute Daily Sync
+        working-directory: "OILTEQ wheels eye"
+        env:
+          WHEELSEYE_USERNAME: ${{ secrets.WHEELSEYE_USERNAME }}
+          WHEELSEYE_PASSWORD: ${{ secrets.WHEELSEYE_PASSWORD }}
+          N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
+        run: |
+          if [ -n "${{ github.event.inputs.target_date }}" ]; then
+            echo "Running sync for custom date: ${{ github.event.inputs.target_date }}"
+            python push_to_n8n.py --date "${{ github.event.inputs.target_date }}"
+          else
+            echo "Running sync for yesterday (8:00 AM daily schedule)"
+            python push_to_n8n.py
+          fi
