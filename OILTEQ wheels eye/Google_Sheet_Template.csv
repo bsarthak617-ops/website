@@ -1,0 +1,10 @@
+Date,Vehicle_Number,Actual_Distance_KM,Route_Category,Expected_Diesel_Liters,Claimed_Diesel_Liters,Diesel_Rate,Driver_Allowance,Audit_Status,Office_Notes,Night_Halt_Location
+01/07/2026,OR05AF7091,244.45,Long Haul / Line-Haul (>175 km),69.8,,,500,Pending Fuel Data,Jharsuguda to Dhenkanal,"Dhenkanal Industrial Gate, Odisha"
+01/07/2026,OR05AG8256,0.07,Parked / Idle,0.0,,,0,Parked / Idle,Badmal Yard,"Badmal Yard, Jharsuguda, Odisha"
+01/07/2026,OR15R2157,0.00,Parked / Idle,0.0,,,0,Parked / Idle,Sambalpur Hub,"Sambalpur Hub, Odisha"
+01/07/2026,OR15P0489,0.00,Parked / Idle,0.0,,,0,Parked / Idle,Jharsuguda Yard,"Jharsuguda Yard, Odisha"
+02/07/2026,OR05AF7091,370.92,Long Haul / Line-Haul (>175 km),106.0,,,500,Pending Fuel Data,Return run via NH-55,"NH-55 Truck Parking, Angul, Odisha"
+02/07/2026,OR15P0489,122.85,Medium Corridor (100-175 km),35.1,,,500,Pending Fuel Data,Jharsuguda - Sundargarh,"Sundargarh Dispatch Depot, Odisha"
+03/07/2026,OR05AF7091,109.35,Medium Corridor (100-175 km),31.2,,,500,Pending Fuel Data,Local plant dispatch,"Local Plant Bay 2, Jharsuguda, Odisha"
+03/07/2026,OR15P0489,240.94,Long Haul / Line-Haul (>175 km),68.8,,,500,Pending Fuel Data,Jharkhand corridor,"Bano Highway Halt, Jharkhand"
+
