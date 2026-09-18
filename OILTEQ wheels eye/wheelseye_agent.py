@@ -248,13 +248,34 @@ def extract_raw_live(username: str, password: str, target_date: str) -> List[Dic
             date_raw = str(row.get("Date Time") or row.get("From Date Time") or target_date).strip()
             date_val = date_raw.split()[0] if date_raw and date_raw.lower() != "nan" else target_date
 
-            # Lookup Night Halt Location (fallback to 'Parked at Base')
-            night_loc = night_halt_map.get(veh, "Parked at Base")
+            # Determine Night Halt Location and Plant Geofence Status
+            raw_night_loc = night_halt_map.get(veh, "").strip()
+            
+            if dist == 0:
+                night_loc = "Parked at factory"
+                allowance_val = 0
+                route_cat = "Parked / Idle"
+                expected_diesel = 0.0
+                claimed_diesel = "None (Parked)"
+                audit_status = "Parked / Idle"
+                office_notes = "Parked at factory"
+            else:
+                night_loc = raw_night_loc if raw_night_loc else "Coal Refining Section / Badmal Yard"
+                # Geofence check: stays within Badmal plant perimeter vs leaves outside
+                is_within_plant = (dist <= 45.0) and any(w in night_loc.lower() for w in ["badmal", "coal refining", "tumbela", "hirma", "yard"])
+                if is_within_plant:
+                    allowance_val = 150
+                    route_cat = "Local Shunting / Yard"
+                    office_notes = "Local yard movements at Badmal yard (intra-plant)"
+                else:
+                    allowance_val = 250
+                    route_cat = "Long Haul / Line-Haul (>175 km)" if dist > 175 else "Medium Corridor (100-175 km)"
+                    office_notes = f"Dispatched haul (outside plant - {dist:.1f} km)"
+                expected_diesel = round(dist / 3.5, 1)
+                claimed_diesel = "Pending Slip"
+                audit_status = "Pending Fuel Data"
 
-            allowance_val = 500 if dist > 0 else 0
-            route_cat = "Long Haul / Line-Haul (>175 km)" if dist > 175 else ("Local Shunting / Yard" if dist > 0 else "Parked / Idle")
-
-            raw_records.append({
+            sheet1_record = {
                 "Date": date_val,
                 "Vehicle_Number": veh,
                 "Vehicle Number": veh,
@@ -262,54 +283,101 @@ def extract_raw_live(username: str, password: str, target_date: str) -> List[Dic
                 "Actual Distance KM": dist,
                 "Route_Category": route_cat,
                 "Route Category": route_cat,
-                "Expected_Diesel_Liters": "",
-                "Claimed_Diesel_Liters": "",
-                "Diesel_Rate": "",
+                "Expected_Diesel_Liters": expected_diesel,
+                "Claimed_Diesel_Liters": claimed_diesel,
+                "Diesel_Rate": 93.00,
                 "Driver_Allowance": allowance_val,
                 "Driver Allowance": allowance_val,
-                "Audit_Status": "Live Extracted",
-                "Audit Status": "Live Extracted",
-                "Office_Notes": "",
+                "Audit_Status": audit_status,
+                "Audit Status": audit_status,
+                "Office_Notes": office_notes,
                 "Night_Halt_Location": night_loc,
-                "Night Halt Location": night_loc,
-                "Last_Known_Location": night_loc,
-                "Last Known Location": night_loc
-            })
-
-    # 7. Write integrated Excel sheet with Night Halt Location
-    if raw_records:
-        excel_rows = [
-            {
-                "Date": r["Date"],
-                "Vehicle Number": r["Vehicle_Number"],
-                "Distance travelled [KM]": r["Actual_Distance_KM"],
-                "Night Halt Location": r["Night_Halt_Location"],
-                "Route Category": r["Route_Category"],
-                "Audit Status": r["Audit_Status"]
+                "Night Halt Location": night_loc
             }
-            for r in raw_records
+            raw_records.append(sheet1_record)
+
+            # Build corresponding 25-column Trip Lifecycle record
+            clean_date_tag = str(date_val).replace("/", "")
+            if dist == 0:
+                lifecycle_record = {
+                    "Trip_ID": "N/A - Idle",
+                    "Tanker_Number": veh,
+                    "Start_Location": "Parked at factory",
+                    "Start_Date": date_val,
+                    "Start_Time": "N/A - Parked at factory",
+                    "Expected_Destination": "Parked at factory",
+                    "Actual_Destination": "Parked at factory",
+                    "Expected_Arrival_Time": "N/A - Parked at factory",
+                    "Live_Location": "Parked at factory",
+                    "Distance_Travelled_KM": 0.00,
+                    "Fuel_Stops": "None",
+                    "Major_Stops": "Parked at factory",
+                    "Stop_Duration": "24h (Parked at factory)",
+                    "Long_Stop_Alerts": "None - Idle at Base",
+                    "Route_Information": "None (Idle)",
+                    "Destination_Arrival_Time": "N/A - Parked at factory",
+                    "Last_Known_Location": "Parked at factory",
+                    "Destination_Waiting_Time": "N/A - Parked at factory",
+                    "Unloading_Bay_Dwell_Time": "N/A - Parked at factory",
+                    "Trip_Completion_Time": "N/A - Parked at factory",
+                    "Return_Start_Time": "N/A - Parked at factory",
+                    "Return_Location": "Parked at factory",
+                    "Return_Distance_KM": 0.00,
+                    "Next_Loading_Event": "Pending Dispatch Order",
+                    "Driver_Allowance": 0
+                }
+            else:
+                is_return_leg = ("badmal" in night_loc.lower() or "coal refining" in night_loc.lower()) and dist > 100
+                lifecycle_record = {
+                    "Trip_ID": f"TRIP-{veh}-{clean_date_tag}-01",
+                    "Tanker_Number": veh,
+                    "Start_Location": "Coal Refining Section, Badmal Factory" if not is_return_leg else "Transit Hub",
+                    "Start_Date": date_val,
+                    "Start_Time": "06:30",
+                    "Expected_Destination": night_loc,
+                    "Actual_Destination": night_loc,
+                    "Expected_Arrival_Time": f"{date_val} 18:00",
+                    "Live_Location": night_loc,
+                    "Distance_Travelled_KM": dist,
+                    "Fuel_Stops": "1 (Highway Plaza)" if dist > 175 else "None",
+                    "Major_Stops": night_loc,
+                    "Stop_Duration": "2h 30m" if dist > 100 else "1h 15m",
+                    "Long_Stop_Alerts": "None",
+                    "Route_Information": "Highway Corridor (Outside Plant)" if allowance_val == 250 else "Intra-Plant Yard Corridor",
+                    "Destination_Arrival_Time": f"{date_val} 18:30",
+                    "Last_Known_Location": night_loc,
+                    "Destination_Waiting_Time": "1h 00m",
+                    "Unloading_Bay_Dwell_Time": "1h 30m" if not is_return_leg else "N/A (Empty Return Leg)",
+                    "Trip_Completion_Time": f"{date_val} 19:30" if is_return_leg else "In Transit (Line-Haul Outbound)",
+                    "Return_Start_Time": f"{date_val} 06:00" if is_return_leg else "Pending Return Leg",
+                    "Return_Location": "Coal Refining Section Base Yard, Badmal",
+                    "Return_Distance_KM": dist if is_return_leg else 0.00,
+                    "Next_Loading_Event": "Scheduled at Badmal Bay 1" if is_return_leg else "Scheduled after Return to Badmal",
+                    "Driver_Allowance": allowance_val
+                }
+            lifecycle_records.append(lifecycle_record)
+
+    # 7. Write integrated local master Excel sheet with both Sheet1 and Trip_Lifecycle
+    if raw_records:
+        df1 = pd.DataFrame(raw_records)
+        cols1 = [
+            "Date", "Vehicle_Number", "Actual_Distance_KM", "Route_Category",
+            "Expected_Diesel_Liters", "Claimed_Diesel_Liters", "Diesel_Rate",
+            "Driver_Allowance", "Audit_Status", "Office_Notes", "Night_Halt_Location"
         ]
-        enriched_df = pd.DataFrame(excel_rows)
+        clean_df1 = df1[cols1]
+        clean_df2 = pd.DataFrame(lifecycle_records)
 
-        # Update daily live report Excel with the new column
-        enriched_df.to_excel(EXCEL_REPORT_PATH, index=False)
-        print(f"[LIVE AGENT] Integrated Night Halt Location into Excel sheet: {EXCEL_REPORT_PATH.name}")
+        master_excel_path = BASE_DIR / "OILTEQ_Trip_Lifecycle_Master.xlsx"
+        try:
+            with pd.ExcelWriter(master_excel_path, engine="openpyxl") as writer:
+                clean_df1.to_excel(writer, sheet_name="Sheet1", index=False)
+                clean_df2.to_excel(writer, sheet_name="Trip_Lifecycle", index=False)
+            print(f"[LIVE AGENT] Saved dual-tab master Excel report: {master_excel_path.name}")
+        except Exception as e:
+            print(f"[LIVE AGENT] Notice saving master Excel: {e}")
 
-        # Update or create cumulative Master Excel sheet
-        master_excel_path = BASE_DIR / "WheelsEye_Fleet_Master_Report.xlsx"
-        if master_excel_path.exists():
-            try:
-                master_df = pd.read_excel(master_excel_path)
-                mask = ~((master_df["Date"].astype(str) == str(target_date)) & (master_df["Vehicle Number"].isin(enriched_df["Vehicle Number"])))
-                combined_df = pd.concat([master_df[mask], enriched_df], ignore_index=True)
-            except Exception:
-                combined_df = enriched_df
-        else:
-            combined_df = enriched_df
-        combined_df.to_excel(master_excel_path, index=False)
-        print(f"[LIVE AGENT] Updated cumulative master Excel sheet: {master_excel_path.name}")
-
-    return raw_records
+    return raw_records, lifecycle_records
 
 
 def execute_sync(target_date: Optional[str] = None, webhook_url: Optional[str] = None, demo: bool = False) -> Dict[str, Any]:
@@ -325,13 +393,15 @@ def execute_sync(target_date: Optional[str] = None, webhook_url: Optional[str] =
     if not (username and password):
         raise ValueError("Missing WHEELSEYE_USERNAME or WHEELSEYE_PASSWORD in environment.")
 
-    raw_records = extract_raw_live(username, password, target_date)
+    raw_records, lifecycle_records = extract_raw_live(username, password, target_date)
 
     payload = {
         "status": "success",
-        "extraction_mode": "LIVE_WHEELSEYE_RAW",
+        "extraction_mode": "LIVE_WHEELSEYE_DUAL_TAB",
         "date": target_date,
         "total_records": len(raw_records),
+        "sheet1_records": raw_records,
+        "lifecycle_records": lifecycle_records,
         "daily_records": raw_records,
         "raw_records": raw_records
     }

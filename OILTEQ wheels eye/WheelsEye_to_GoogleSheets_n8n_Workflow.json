@@ -1,0 +1,154 @@
+{
+  "name": "WheelsEye to Google Sheets Dual-Tab Daily Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "wheelseye-data",
+        "responseMode": "onReceived",
+        "responseData": "allEntries",
+        "options": {}
+      },
+      "id": "webhook-wheelseye-receiver",
+      "name": "WheelsEye Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300],
+      "webhookId": "wheelseye-data"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract dual-tab records\nconst inputData = $input.first().json;\nconst payload = inputData.body || inputData;\n\nconst sheet1Records = payload.sheet1_records || payload.daily_records || [];\nconst lifecycleRecords = payload.lifecycle_records || [];\n\nreturn [\n  {\n    json: {\n      sheet1_records: sheet1Records,\n      lifecycle_records: lifecycleRecords,\n      total_sheet1: sheet1Records.length,\n      total_lifecycle: lifecycleRecords.length\n    }\n  }\n];"
+      },
+      "id": "code-process-dual-tab",
+      "name": "Process Dual-Tab Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 300]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "sheet1_records",
+        "options": {}
+      },
+      "id": "split-sheet1-records",
+      "name": "Split Sheet1 Records",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [680, 200]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Yro_q3AAqUocjwwVmqeQacYJp_Gq70jPwblW3yl75yQ",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData"
+        },
+        "options": {}
+      },
+      "id": "google-sheets-append-sheet1",
+      "name": "Append to Sheet1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [920, 200]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "lifecycle_records",
+        "options": {}
+      },
+      "id": "split-lifecycle-records",
+      "name": "Split Lifecycle Records",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [680, 420]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Yro_q3AAqUocjwwVmqeQacYJp_Gq70jPwblW3yl75yQ",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Trip_Lifecycle",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData"
+        },
+        "options": {}
+      },
+      "id": "google-sheets-append-lifecycle",
+      "name": "Append to Trip_Lifecycle",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [920, 420]
+    }
+  ],
+  "connections": {
+    "WheelsEye Webhook": {
+      "main": [
+        [
+          {
+            "node": "Process Dual-Tab Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Dual-Tab Payload": {
+      "main": [
+        [
+          {
+            "node": "Split Sheet1 Records",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Lifecycle Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Sheet1 Records": {
+      "main": [
+        [
+          {
+            "node": "Append to Sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Lifecycle Records": {
+      "main": [
+        [
+          {
+            "node": "Append to Trip_Lifecycle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

@@ -36,74 +36,37 @@ def push_file_to_n8n(file_path: Path, webhook_url: str) -> bool:
         print(f"❌ File not found: {file_path}")
         return False
 
-    df = pd.read_excel(file_path)
-    records = []
-    veh_col = next((c for c in df.columns if "veh" in c.lower()), "Vehicle Number")
-    dist_col = next((c for c in df.columns if "dist" in c.lower()), "Actual_Distance_KM")
-    loc_col = next((c for c in df.columns if "halt" in c.lower() or "loc" in c.lower() or "stop" in c.lower()), "Night_Halt_Location")
-    cat_col = next((c for c in df.columns if "cat" in c.lower() or "route" in c.lower()), "Route_Category")
-    status_col = next((c for c in df.columns if "audit" in c.lower() or "status" in c.lower()), "Audit_Status")
+    xl = pd.ExcelFile(file_path)
+    sheet1_records = []
+    lifecycle_records = []
 
-    for _, row in df.iterrows():
-        veh = str(row.get(veh_col) or "").strip()
-        if not veh or veh.lower() == "nan":
-            continue
-        try:
-            dist = float(row.get(dist_col) or 0.0)
-        except Exception:
-            dist = 0.0
-        loc = str(row.get(loc_col) or "Parked at Base").strip()
-        cat = str(row.get(cat_col) or "WheelsEye Live").strip()
-        status = str(row.get(status_col) or "Live Extracted").strip()
-        date_val = str(row.get("Date") or "").strip()
+    # Parse Sheet1 (or first sheet)
+    s1_name = "Sheet1" if "Sheet1" in xl.sheet_names else xl.sheet_names[0]
+    df1 = pd.read_excel(file_path, sheet_name=s1_name)
+    sheet1_records = df1.fillna("").to_dict(orient="records")
 
-        allowance = row.get("Driver_Allowance") or row.get("Driver Allowance")
-        if allowance is None or str(allowance).strip() == "" or str(allowance).lower() == "nan":
-            allowance_val = 500 if dist > 0 else 0
-        else:
-            try:
-                allowance_val = int(float(allowance))
-            except Exception:
-                allowance_val = 500 if dist > 0 else 0
-
-        record = {
-            "Date": date_val,
-            "Vehicle_Number": veh,
-            "Vehicle Number": veh,
-            "Actual_Distance_KM": dist,
-            "Actual Distance KM": dist,
-            "Route_Category": cat,
-            "Route Category": cat,
-            "Expected_Diesel_Liters": "",
-            "Claimed_Diesel_Liters": "",
-            "Diesel_Rate": "",
-            "Driver_Allowance": allowance_val,
-            "Driver Allowance": allowance_val,
-            "Audit_Status": status,
-            "Audit Status": status,
-            "Office_Notes": "",
-            "Night_Halt_Location": loc,
-            "Night Halt Location": loc,
-            "Last_Known_Location": loc,
-            "Last Known Location": loc
-        }
-        records.append(record)
+    # Parse Trip_Lifecycle if present
+    if "Trip_Lifecycle" in xl.sheet_names:
+        df2 = pd.read_excel(file_path, sheet_name="Trip_Lifecycle")
+        lifecycle_records = df2.fillna("").to_dict(orient="records")
 
     payload = {
         "status": "success",
-        "extraction_mode": "DIRECT_REPORT_PUSH",
-        "total_records": len(records),
-        "daily_records": records,
-        "raw_records": records
+        "extraction_mode": "DUAL_TAB_REPORT_PUSH",
+        "total_records": len(sheet1_records),
+        "sheet1_records": sheet1_records,
+        "lifecycle_records": lifecycle_records,
+        "daily_records": sheet1_records,
+        "raw_records": sheet1_records
     }
 
-    print(f"[PUSH] Transmitting {len(records)} records from {file_path.name} directly to n8n ({webhook_url})...")
+    print(f"[PUSH] Transmitting {len(sheet1_records)} audit records and {len(lifecycle_records)} lifecycle records from {file_path.name} to n8n ({webhook_url})...")
     res = requests.post(webhook_url, json=payload, timeout=30)
     if res.status_code in [200, 201]:
         print(f"✅ SUCCESS! n8n confirmed webhook start ({res.status_code}): {res.text}")
         return True
     else:
-        print(f"❌ n8n returned error ({res.status_code}): {res.text}")
+        print(f"❌ n8n returned status ({res.status_code}): {res.text}")
         return False
 
 
