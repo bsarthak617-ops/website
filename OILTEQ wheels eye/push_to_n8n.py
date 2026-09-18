@@ -50,14 +50,16 @@ def push_file_to_n8n(file_path: Path, webhook_url: str) -> bool:
         df2 = pd.read_excel(file_path, sheet_name="Trip_Lifecycle")
         lifecycle_records = df2.fillna("").to_dict(orient="records")
 
+    records_for_default = lifecycle_records if lifecycle_records else sheet1_records
+
     payload = {
         "status": "success",
-        "extraction_mode": "DUAL_TAB_REPORT_PUSH",
-        "total_records": len(sheet1_records),
+        "extraction_mode": "LIFECYCLE_REPORT_PUSH",
+        "total_records": len(records_for_default),
         "sheet1_records": sheet1_records,
         "lifecycle_records": lifecycle_records,
-        "daily_records": sheet1_records,
-        "raw_records": sheet1_records
+        "daily_records": records_for_default,
+        "raw_records": records_for_default
     }
 
     print(f"[PUSH] Transmitting {len(sheet1_records)} audit records and {len(lifecycle_records)} lifecycle records from {file_path.name} to n8n ({webhook_url})...")

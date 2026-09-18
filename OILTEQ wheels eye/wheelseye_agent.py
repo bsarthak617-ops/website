@@ -397,13 +397,13 @@ def execute_sync(target_date: Optional[str] = None, webhook_url: Optional[str] =
 
     payload = {
         "status": "success",
-        "extraction_mode": "LIVE_WHEELSEYE_DUAL_TAB",
+        "extraction_mode": "LIVE_WHEELSEYE_LIFECYCLE",
         "date": target_date,
-        "total_records": len(raw_records),
+        "total_records": len(lifecycle_records),
         "sheet1_records": raw_records,
         "lifecycle_records": lifecycle_records,
-        "daily_records": raw_records,
-        "raw_records": raw_records
+        "daily_records": lifecycle_records,
+        "raw_records": lifecycle_records
     }
 
     # Save local verification backup
