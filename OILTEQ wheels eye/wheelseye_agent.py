@@ -15,7 +15,7 @@ import time
 import argparse
 import datetime
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple
 import pandas as pd
 import requests
 
@@ -82,7 +82,7 @@ def ensure_authenticated(page, username: str, password: str):
     print("[AUTH] Successfully confirmed dashboard access.")
 
 
-def extract_raw_live(username: str, password: str, target_date: str) -> List[Dict[str, Any]]:
+def extract_raw_live(username: str, password: str, target_date: str) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     """
     Safely logs into WheelsEye Fleet Owner portal:
     1. Extracts yesterday's Stoppage Report to capture Night_Halt_Location for each truck.
@@ -98,6 +98,7 @@ def extract_raw_live(username: str, password: str, target_date: str) -> List[Dic
 
     print(f"[LIVE AGENT] Starting live extraction for date: {target_date} (Day {day_str})...")
     raw_records: List[Dict[str, Any]] = []
+    lifecycle_records: List[Dict[str, Any]] = []
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True, args=["--no-sandbox", "--disable-setuid-sandbox"])
