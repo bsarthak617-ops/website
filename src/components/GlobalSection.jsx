@@ -21,6 +21,10 @@ export default function GlobalSection({ onOpenQuote }) {
   const translateY = useTransform(smoothY, [-0.5, 0.5], [-8, 8]);
 
   const handleMouseMove = (e) => {
+    // Disable 3D tilt tracking on mobile/touch screens to prevent erratic motion
+    if (window.innerWidth < 1024 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches)) {
+      return;
+    }
     if (!sectionRef.current) return;
     const rect = sectionRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
@@ -39,7 +43,7 @@ export default function GlobalSection({ onOpenQuote }) {
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="py-24 px-4 sm:px-6 lg:px-8 border-t border-brand-border-light dark:border-brand-border-dark bg-brand-charcoal text-white relative overflow-hidden"
+      className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-brand-border-light dark:border-brand-border-dark bg-brand-charcoal text-white relative overflow-hidden"
     >
       {/* Background Industrial Image & Pattern */}
       <div 
@@ -52,7 +56,7 @@ export default function GlobalSection({ onOpenQuote }) {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: 3D Interactive Motion Map (Enlarged to fit space) */}
-          <div className="lg:col-span-7 flex items-center justify-center [perspective:1400px] w-full py-4 order-2 lg:order-1">
+          <div className="lg:col-span-7 flex items-center justify-center [perspective:1400px] w-full py-4 order-2 lg:order-1 overflow-hidden">
             <motion.div
               style={{
                 rotateX,
@@ -61,7 +65,7 @@ export default function GlobalSection({ onOpenQuote }) {
                 translateY,
                 transformStyle: 'preserve-3d',
               }}
-              className="relative w-full max-w-[760px] lg:scale-110 xl:scale-115 origin-center"
+              className="relative w-full max-w-[760px] lg:scale-105 xl:scale-110 origin-center"
             >
               {/* Map Image */}
               <div className="relative w-full [transform:translateZ(0px)] filter drop-shadow-[0_30px_45px_rgba(0,0,0,0.92)] drop-shadow-[0_0_55px_rgba(202,154,67,0.25)] transition-all duration-300">
@@ -166,7 +170,7 @@ export default function GlobalSection({ onOpenQuote }) {
                   <button
                     key={s.id}
                     onClick={() => setSelectedSpot(s)}
-                    className={`px-3.5 py-1.5 text-xs font-medium rounded-lg border transition-all ${
+                    className={`px-3.5 py-2 min-h-[38px] text-xs font-medium rounded-lg border transition-all flex items-center justify-center ${
                       selectedSpot.id === s.id
                         ? 'bg-brand-gold text-brand-charcoal font-bold border-brand-gold shadow-md shadow-brand-gold/20'
                         : 'bg-white/[0.05] text-white/70 hover:text-white border-white/10 hover:border-white/20 hover:bg-white/[0.08]'

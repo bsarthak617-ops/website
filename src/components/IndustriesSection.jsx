@@ -34,14 +34,19 @@ export default function IndustriesSection({ onSelectIndustryQuote }) {
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
                 className={`relative p-7 border transition-all duration-300 rounded-sm overflow-hidden group flex flex-col justify-between min-h-[320px] ${
                   isHovered
-                    ? 'border-brand-gold shadow-xl scale-[1.02]'
-                    : 'border-brand-border-light dark:border-brand-border-dark bg-brand-bg-light dark:bg-brand-bg-dark'
+                    ? 'border-brand-gold shadow-2xl shadow-black/25 dark:shadow-black/70 -translate-y-1.5'
+                    : 'border-brand-border-light dark:border-brand-border-dark bg-brand-bg-light dark:bg-brand-bg-dark hover:border-brand-border-light/90'
                 }`}
               >
+                {/* Glowing Gold Top Edge on Hover */}
+                <div className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-brand-gold to-transparent transition-opacity duration-300 pointer-events-none z-20 ${
+                  isHovered ? 'opacity-100' : 'opacity-0'
+                }`} />
+
                 {/* Background image reveal on hover */}
                 <div
-                  className={`absolute inset-0 bg-cover bg-center transition-all duration-500 pointer-events-none ${
-                    isHovered ? 'opacity-100 scale-105 filter contrast-115 brightness-90' : 'opacity-0'
+                  className={`absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out pointer-events-none ${
+                    isHovered ? 'opacity-100 scale-105 filter contrast-115 brightness-90' : 'opacity-0 scale-100'
                   }`}
                   style={{ backgroundImage: `url('${ind.image}')` }}
                 />

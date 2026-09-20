@@ -81,21 +81,21 @@ export default function QuotePortal({ selectedProduct, selectedIndustry, onOpenS
         </div>
 
         {/* Procurement Form / Submission Card */}
-        <div className="border border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface rounded-sm p-6 sm:p-10">
+        <div className="border border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface rounded-sm p-4 sm:p-8 lg:p-10">
           {!submitted ? (
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
               {/* Step 1: Product & Application Configuration */}
               <div>
-                <span className="tech-label text-brand-gold block mb-4">
+                <span className="tech-label text-brand-gold block mb-3 sm:mb-4">
                   STEP 01: FUEL SPECIFICATION & VOLUME
                 </span>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 mb-6">
                   {PRODUCTS.map((prod) => (
                     <div
                       key={prod.id}
                       onClick={() => setFormData({ ...formData, product: prod.name })}
-                      className={`p-4 border rounded-sm cursor-pointer transition-all ${
+                      className={`p-3.5 sm:p-4 border rounded-sm cursor-pointer transition-all ${
                         formData.product === prod.name
                           ? 'border-brand-gold bg-brand-bg-light dark:bg-brand-bg-dark shadow-sm'
                           : 'border-brand-border-light dark:border-brand-border-dark hover:border-brand-border-light/80'

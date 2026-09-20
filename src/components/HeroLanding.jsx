@@ -1,20 +1,31 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, ChevronRight, CheckCircle2 } from 'lucide-react';
 import heroRefineryImg from '../assets/hero-refinery.jpg';
 
 export default function HeroLanding({ onOpenQuote, onOpenSpecs }) {
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  // Parallax motion: background refinery drifts slower than page scroll for deep cinematic layering
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%']);
+  const watermarkX = useTransform(scrollYProgress, [0, 1], ['2%', '-6%']);
+
   return (
-    <section id="about" className="relative min-h-[92vh] lg:min-h-screen flex flex-col justify-between py-20 lg:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden bg-brand-bg-light dark:bg-brand-bg-dark">
-      {/* Background Photo & Texture Layer (z-0) */}
+    <section ref={sectionRef} id="about" className="relative min-h-[92vh] lg:min-h-screen flex flex-col justify-between py-20 lg:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden bg-brand-bg-light dark:bg-brand-bg-dark">
+      {/* Background Photo & Texture Layer with Scroll Parallax (z-0) */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <motion.div 
-          initial={{ scale: 1.05 }}
-          animate={{ scale: 1 }}
+          initial={{ scale: 1.08 }}
+          animate={{ scale: 1.05 }}
           transition={{ duration: 2.5, ease: "easeOut" }}
-          className="absolute inset-0 bg-cover bg-right lg:bg-center bg-no-repeat opacity-90 dark:opacity-80 filter contrast-125 brightness-90 saturate-110"
+          className="absolute -inset-y-16 inset-x-0 bg-cover bg-right lg:bg-center bg-no-repeat opacity-90 dark:opacity-80 filter contrast-125 brightness-90 saturate-110"
           style={{
-            backgroundImage: `url(${heroRefineryImg})`
+            backgroundImage: `url(${heroRefineryImg})`,
+            y: backgroundY
           }}
         />
         {/* Tuned Gradient Scrim for optimal text legibility while keeping photo details rich */}
@@ -26,10 +37,13 @@ export default function HeroLanding({ onOpenQuote, onOpenSpecs }) {
         <div className="absolute inset-0 technical-grid opacity-20 pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-b from-brand-bg-light/40 via-transparent to-brand-bg-light dark:from-brand-bg-dark/50 dark:via-transparent dark:to-brand-bg-dark pointer-events-none" />
         
-        {/* Giant subtle cropped brand lettering in background */}
-        <div className="absolute bottom-10 right-0 text-[18vw] font-black text-black/[0.03] dark:text-white/[0.03] select-none pointer-events-none leading-none tracking-tighter uppercase font-sans">
+        {/* Giant subtle cropped brand lettering in background with smooth parallax drift */}
+        <motion.div 
+          style={{ x: watermarkX }}
+          className="absolute bottom-10 right-0 text-[18vw] font-black text-black/[0.03] dark:text-white/[0.03] select-none pointer-events-none leading-none tracking-tighter uppercase font-sans max-w-full overflow-hidden"
+        >
           OILTEQ
-        </div>
+        </motion.div>
       </div>
 
       {/* Main Hero Content (z-10) */}
@@ -41,7 +55,7 @@ export default function HeroLanding({ onOpenQuote, onOpenSpecs }) {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tightest leading-[1.03] text-brand-text-light dark:text-brand-text-dark"
+              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tightest leading-[1.03] text-brand-text-light dark:text-brand-text-dark"
             >
               FUEL SOLUTIONS
             </motion.h1>
@@ -49,7 +63,7 @@ export default function HeroLanding({ onOpenQuote, onOpenSpecs }) {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.35 }}
-              className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tightest leading-[1.03] text-brand-text-light dark:text-brand-text-dark"
+              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tightest leading-[1.03] text-brand-text-light dark:text-brand-text-dark"
             >
               BUILT AROUND YOUR
             </motion.h1>
@@ -57,7 +71,7 @@ export default function HeroLanding({ onOpenQuote, onOpenSpecs }) {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tightest leading-[1.03] text-brand-gold dark:text-brand-gold-light"
+              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tightest leading-[1.03] text-brand-gold dark:text-brand-gold-light"
             >
               OPERATION.
             </motion.h1>

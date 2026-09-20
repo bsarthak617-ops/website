@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import Lenis from 'lenis';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import HeroLanding from './components/HeroLanding';
@@ -18,6 +19,8 @@ export default function App() {
   const [selectedSpecsProduct, setSelectedSpecsProduct] = useState('batch-plant-fuel');
   const [selectedQuoteProduct, setSelectedQuoteProduct] = useState('Batch Plant Fuel');
   const [selectedQuoteIndustry, setSelectedQuoteIndustry] = useState('Hotmix Asphalt Plants');
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const lenisRef = useRef(null);
 
   useEffect(() => {
     if (isDark) {
@@ -26,6 +29,69 @@ export default function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [isDark]);
+
+  // Initialize Lenis Momentum Smooth Scroll Engine
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.25,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 0.95,
+      touchMultiplier: 1.5,
+    });
+
+    lenisRef.current = lenis;
+    window.__oilteq_lenis = lenis;
+
+    let rafId;
+    function raf(time) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
+
+    // Global scroll progress tracking
+    const onLenisScroll = (e) => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (maxScroll > 0) {
+        setScrollProgress(Math.min(1, Math.max(0, e.scroll / maxScroll)));
+      }
+    };
+    lenis.on('scroll', onLenisScroll);
+
+    // Smooth anchor navigation interceptor
+    const handleAnchorClick = (e) => {
+      const target = e.target.closest('a[href^="#"]');
+      if (!target) return;
+      const href = target.getAttribute('href');
+      if (!href || href === '#') return;
+      const targetElement = document.querySelector(href);
+      if (targetElement) {
+        e.preventDefault();
+        lenis.scrollTo(targetElement, { offset: -25, duration: 1.3 });
+      }
+    };
+    document.addEventListener('click', handleAnchorClick);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+      document.removeEventListener('click', handleAnchorClick);
+      delete window.__oilteq_lenis;
+    };
+  }, []);
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (!element) return;
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(element, { offset: -25, duration: 1.3 });
+    } else {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const handleOpenSpecs = (productIdOrName) => {
     if (productIdOrName) {
@@ -37,30 +103,29 @@ export default function App() {
   const handleOpenQuote = (productName, industryName) => {
     if (productName) setSelectedQuoteProduct(productName);
     if (industryName) setSelectedQuoteIndustry(industryName);
-    const element = document.getElementById('quote');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToSection('quote');
   };
 
   const handleSelectProductQuote = (productName) => {
     setSelectedQuoteProduct(productName);
-    const element = document.getElementById('quote');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToSection('quote');
   };
 
   const handleSelectIndustryQuote = (industryName) => {
     setSelectedQuoteIndustry(industryName);
-    const element = document.getElementById('quote');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToSection('quote');
   };
 
   return (
     <div className="min-h-screen bg-brand-bg-light text-brand-text-light dark:bg-brand-bg-dark dark:text-brand-text-dark selection:bg-brand-gold selection:text-white transition-colors duration-300">
+      {/* Top Global Scroll Progress Bar */}
+      <div className="fixed top-0 left-0 right-0 z-[60] h-[2.5px] pointer-events-none bg-black/5 dark:bg-white/5">
+        <div
+          className="h-full bg-gradient-to-r from-brand-gold via-amber-300 to-brand-gold shadow-[0_0_10px_rgba(202,154,67,0.75)] transition-all duration-75 ease-out"
+          style={{ width: `${scrollProgress * 100}%` }}
+        />
+      </div>
+
       {/* Top Fixed Navbar */}
       <Navbar
         isDark={isDark}

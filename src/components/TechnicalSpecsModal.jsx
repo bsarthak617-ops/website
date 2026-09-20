@@ -41,35 +41,41 @@ export default function TechnicalSpecsModal({ isOpen, onClose, onSelectQuote, in
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6 overflow-y-auto bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 10 }}
+          initial={{ opacity: 0, scale: 0.96, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          className="relative w-full max-w-4xl bg-brand-bg-light dark:bg-brand-bg-dark border border-brand-border-light dark:border-brand-border-dark rounded-sm shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+          exit={{ opacity: 0, scale: 0.96, y: 20 }}
+          className="relative w-full max-w-4xl bg-brand-bg-light dark:bg-brand-bg-dark border-t sm:border border-brand-border-light dark:border-brand-border-dark rounded-t-2xl sm:rounded-sm shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[90vh]"
         >
+          {/* Mobile Bottom-Sheet Pull Bar */}
+          <div className="sm:hidden w-full flex justify-center pt-2.5 pb-1 bg-brand-bg-surface dark:bg-brand-bg-dark-surface">
+            <span className="w-12 h-1.5 rounded-full bg-brand-border-light dark:border-brand-border-dark" />
+          </div>
+
           {/* Modal Header */}
-          <div className="p-6 border-b border-brand-border-light dark:border-brand-border-dark flex items-center justify-between bg-brand-bg-surface dark:bg-brand-bg-dark-surface">
+          <div className="p-4 sm:p-6 border-b border-brand-border-light dark:border-brand-border-dark flex items-center justify-between bg-brand-bg-surface dark:bg-brand-bg-dark-surface">
             <div>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-brand-gold" />
-                <span className="tech-label text-brand-gold">OILTEQ LABORATORY TESTING COA</span>
+                <span className="tech-label text-brand-gold text-[10px] sm:text-xs">OILTEQ LABORATORY TESTING COA</span>
               </div>
-              <h3 className="text-xl font-extrabold text-brand-text-light dark:text-brand-text-dark tracking-tight mt-0.5">
+              <h3 className="text-base sm:text-xl font-extrabold text-brand-text-light dark:text-brand-text-dark tracking-tight mt-0.5">
                 Certified Fuel Specifications & Test Standards
               </h3>
             </div>
 
             <button
               onClick={onClose}
-              className="p-2 text-brand-text-light-muted hover:text-brand-text-light dark:text-brand-text-dark-muted dark:hover:text-brand-text-dark rounded-sm border border-transparent hover:border-brand-border-light dark:hover:border-brand-border-dark transition-colors"
+              className="p-2.5 text-brand-text-light-muted hover:text-brand-text-light dark:text-brand-text-dark-muted dark:hover:text-brand-text-dark rounded-sm border border-transparent hover:border-brand-border-light dark:hover:border-brand-border-dark transition-colors"
+              aria-label="Close modal"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Product Tabs */}
-          <div className="flex border-b border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface px-6 pt-2 gap-2 overflow-x-auto">
+          <div className="flex border-b border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface px-4 sm:px-6 pt-2 gap-2 overflow-x-auto scrollbar-none">
             {PRODUCTS.map((prod) => (
               <button
                 key={prod.id}
@@ -117,8 +123,8 @@ export default function TechnicalSpecsModal({ isOpen, onClose, onSelectQuote, in
                 LABORATORY SPECIFICATION PARAMETERS:
               </span>
 
-              <div className="border border-brand-border-light dark:border-brand-border-dark rounded-sm overflow-hidden">
-                <table className="w-full text-left text-xs font-mono">
+              <div className="border border-brand-border-light dark:border-brand-border-dark rounded-sm overflow-x-auto">
+                <table className="w-full min-w-[380px] text-left text-xs font-mono">
                   <thead className="bg-brand-bg-surface dark:bg-brand-bg-dark-surface border-b border-brand-border-light dark:border-brand-border-dark text-brand-text-light-muted dark:text-brand-text-dark-muted">
                     <tr>
                       <th className="p-3 font-semibold">TEST PARAMETER</th>

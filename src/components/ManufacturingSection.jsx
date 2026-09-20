@@ -19,19 +19,19 @@ export default function ManufacturingSection() {
           </p>
         </div>
 
-        {/* Process Steps Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3 mb-12">
+        {/* Process Steps Bar - Horizontal swipeable pills on mobile, 5-col grid on sm+ */}
+        <div className="flex sm:grid sm:grid-cols-5 gap-2.5 sm:gap-3 mb-8 sm:mb-12 overflow-x-auto pb-3 sm:pb-0 scrollbar-none snap-x -mx-4 px-4 sm:mx-0 sm:px-0">
           {MANUFACTURING_STAGES.map((stage, idx) => (
             <button
               key={stage.step}
               onClick={() => setActiveStage(idx)}
-              className={`p-4 text-left border transition-all duration-200 rounded-sm relative ${
+              className={`p-3.5 sm:p-4 text-left border transition-all duration-200 rounded-sm relative flex-shrink-0 min-w-[160px] sm:min-w-0 snap-start ${
                 activeStage === idx
                   ? 'border-brand-gold bg-brand-bg-surface dark:bg-brand-bg-dark-surface shadow-sm'
                   : 'border-brand-border-light dark:border-brand-border-dark hover:border-brand-border-light/80 bg-transparent'
               }`}
             >
-              <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center justify-between mb-1.5">
                 <span className={`text-xs font-mono font-bold ${activeStage === idx ? 'text-brand-gold' : 'text-brand-text-light-subtle dark:text-brand-text-dark-subtle'}`}>
                   {stage.number}
                 </span>
@@ -39,7 +39,7 @@ export default function ManufacturingSection() {
                   <span className="w-1.5 h-1.5 rounded-full bg-brand-gold animate-ping" />
                 )}
               </div>
-              <h4 className="text-xs font-extrabold tracking-wider uppercase text-brand-text-light dark:text-brand-text-dark">
+              <h4 className="text-xs font-extrabold tracking-wider uppercase text-brand-text-light dark:text-brand-text-dark whitespace-nowrap sm:whitespace-normal">
                 {stage.step}
               </h4>
             </button>
@@ -54,7 +54,7 @@ export default function ManufacturingSection() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 lg:grid-cols-12 gap-8 border border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface p-6 sm:p-10 rounded-sm"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 border border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface p-5 sm:p-8 lg:p-10 rounded-sm"
           >
             {/* Left: Detail Narrative */}
             <div className="lg:col-span-6 flex flex-col justify-between space-y-6">
