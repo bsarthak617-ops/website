@@ -3,6 +3,65 @@
   "nodes": [
     {
       "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-daily-8am",
+      "name": "Daily 8:00 AM IST Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        200,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.github.com/repos/namyavenkatraman-design/oilteq/actions/workflows/daily_sync.yml/dispatches",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_GITHUB_TOKEN"
+            },
+            {
+              "name": "X-GitHub-Api-Version",
+              "value": "2022-11-28"
+            },
+            {
+              "name": "User-Agent",
+              "value": "n8n-cloud-oilteq"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"ref\": \"main\"\n}",
+        "options": {}
+      },
+      "id": "http-trigger-github-sync",
+      "name": "Trigger GitHub Cloud Sync",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        100
+      ]
+    },
+    {
+      "parameters": {
         "httpMethod": "POST",
         "path": "wheelseye-data",
         "responseMode": "onReceived",
@@ -13,7 +72,10 @@
       "name": "WheelsEye Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [200, 300],
+      "position": [
+        200,
+        300
+      ],
       "webhookId": "wheelseye-data"
     },
     {
@@ -24,7 +86,10 @@
       "name": "Process Dual-Tab Payload",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [440, 300]
+      "position": [
+        440,
+        300
+      ]
     },
     {
       "parameters": {
@@ -35,7 +100,10 @@
       "name": "Split Sheet1 Records",
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
-      "position": [680, 200]
+      "position": [
+        680,
+        200
+      ]
     },
     {
       "parameters": {
@@ -59,7 +127,10 @@
       "name": "Append to Sheet1",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [920, 200]
+      "position": [
+        920,
+        200
+      ]
     },
     {
       "parameters": {
@@ -70,7 +141,10 @@
       "name": "Split Lifecycle Records",
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
-      "position": [680, 420]
+      "position": [
+        680,
+        420
+      ]
     },
     {
       "parameters": {
@@ -94,7 +168,10 @@
       "name": "Append to Trip_Lifecycle",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [920, 420]
+      "position": [
+        920,
+        420
+      ]
     }
   ],
   "connections": {
@@ -146,9 +223,21 @@
           }
         ]
       ]
+    },
+    "Daily 8:00 AM IST Schedule": {
+      "main": [
+        [
+          {
+            "node": "Trigger GitHub Cloud Sync",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata"
   }
 }

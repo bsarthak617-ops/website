@@ -72,6 +72,24 @@ def push_file_to_n8n(file_path: Path, webhook_url: str) -> bool:
         return False
 
 
+def check_date_already_synced(target_date: str) -> bool:
+    """
+    Checks the live Google Sheet to see if the target date has already been synced.
+    Prevents duplicate appends if multiple triggers fire on the same day.
+    """
+    import urllib.request, csv, io
+    sheet_url = "https://docs.google.com/spreadsheets/d/1Yro_q3AAqUocjwwVmqeQacYJp_Gq70jPwblW3yl75yQ/gviz/tq?tqx=out:csv&sheet=Trip_Lifecycle"
+    try:
+        req = urllib.request.Request(sheet_url, headers={"User-Agent": "Mozilla/5.0"})
+        content = urllib.request.urlopen(req, timeout=8).read().decode("utf-8")
+        reader = list(csv.reader(io.StringIO(content)))
+        dates_in_sheet = {row[3].strip() for row in reader[1:] if len(row) > 3 and row[3].strip()}
+        return target_date.strip() in dates_in_sheet
+    except Exception as e:
+        print(f"[PRE-CHECK] Notice checking existing sheet dates: {e}")
+        return False
+
+
 def main():
     parser = argparse.ArgumentParser(description="Automated WheelsEye live sync to Google Sheets")
     parser.add_argument(
@@ -98,6 +116,11 @@ def main():
         default=3,
         help="Maximum retry attempts if portal or network fails"
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Force execution even if target date is already present in Google Sheets"
+    )
     args = parser.parse_args()
 
     if args.file:
@@ -119,6 +142,13 @@ def main():
     print(f"Target Webhook: {args.webhook}")
     print(f"Max Retries:    {args.retries}")
     print("-" * 65)
+
+    # Idempotency pre-check: prevent duplicate entries if already synced
+    if not args.force and check_date_already_synced(target_date):
+        print(f"ℹ️ Target date {target_date} is ALREADY populated in Google Sheets.")
+        print("   Skipping sync to prevent duplicate rows. Pass --force to override.")
+        print("=" * 65)
+        return 0
 
     # Allow 3 seconds for network/Wi-Fi to settle in case machine just woke up
     time.sleep(3)
