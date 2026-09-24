@@ -20,12 +20,16 @@ export default function Hero() {
     framesRef.current = frames;
     const requested = new Set();
 
+    // Use lightweight 720p mobile frames on small viewports (<768px) for 6x faster loading
+    const isMobileDevice = typeof window !== 'undefined' && (window.innerWidth < 768 || (window.screen && window.screen.width < 768));
+    const sequenceFolder = isMobileDevice ? '/hero-sequence-mobile' : '/hero-sequence';
+
     // Helper to safely load a frame index
     const loadFrame = (idx) => {
       if (idx < 0 || idx >= TOTAL_FRAMES || requested.has(idx)) return;
       requested.add(idx);
       const img = new Image();
-      img.src = `/hero-sequence/frame_${String(idx).padStart(3, '0')}.webp?v=clean-v2`;
+      img.src = `${sequenceFolder}/frame_${String(idx).padStart(3, '0')}.webp?v=clean-v2`;
       img.onload = () => {
         if (!active) return;
         frames[idx] = img;
@@ -37,7 +41,7 @@ export default function Hero() {
 
     // 1. Immediately load frame 0 for instant First Contentful Paint (<50ms)
     const firstImg = new Image();
-    firstImg.src = '/hero-sequence/frame_000.webp?v=clean-v2';
+    firstImg.src = `${sequenceFolder}/frame_000.webp?v=clean-v2`;
     firstImg.onload = () => {
       if (!active) return;
       frames[0] = firstImg;
@@ -46,30 +50,41 @@ export default function Hero() {
       drawFrame(0);
     };
 
-    // 2. Preload the initial interactive window (frames 1 to 30)
-    for (let i = 1; i <= 30; i++) {
+    // 2. Preload sparse keyframes across the entire sequence (every 15 frames)
+    // Guarantees that even fast thumb scrolls on mobile instantly have a crisp frame nearby
+    const keyframes = [];
+    for (let k = 0; k < TOTAL_FRAMES; k += 15) {
+      keyframes.push(k);
+    }
+    if (!keyframes.includes(TOTAL_FRAMES - 1)) keyframes.push(TOTAL_FRAMES - 1);
+    keyframes.forEach((kf) => loadFrame(kf));
+
+    // 3. Preload initial scrub window (frames 1 to 25)
+    for (let i = 1; i <= 25; i++) {
       loadFrame(i);
     }
 
-    // 3. Progressive batch streaming: load remaining frames in small non-blocking intervals
+    // 4. Progressive batch streaming: fill remaining unrequested frames in small non-blocking intervals
     let batchTimeout = null;
-    let nextBatchFrame = 31;
+    let nextBatchFrame = 0;
     const loadNextBatch = () => {
       if (!active || nextBatchFrame >= TOTAL_FRAMES) return;
-      const end = Math.min(TOTAL_FRAMES, nextBatchFrame + 15);
+      const end = Math.min(TOTAL_FRAMES, nextBatchFrame + 12);
       for (let i = nextBatchFrame; i < end; i++) {
         loadFrame(i);
       }
       nextBatchFrame = end;
       if (nextBatchFrame < TOTAL_FRAMES) {
-        batchTimeout = setTimeout(loadNextBatch, 25);
+        batchTimeout = setTimeout(loadNextBatch, 30);
       }
     };
     batchTimeout = setTimeout(loadNextBatch, 80);
 
-    // Dynamic preloading window around user's current scrub position
+    // Dynamic preloading window around user's current scrub position (priority window)
     const preloadAhead = (currentIdx) => {
-      for (let i = Math.max(0, currentIdx - 10); i <= Math.min(TOTAL_FRAMES - 1, currentIdx + 30); i++) {
+      const start = Math.max(0, currentIdx - 10);
+      const end = Math.min(TOTAL_FRAMES - 1, currentIdx + 30);
+      for (let i = start; i <= end; i++) {
         loadFrame(i);
       }
     };
@@ -198,7 +213,8 @@ export default function Hero() {
     const onScroll = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const totalScroll = containerRef.current.offsetHeight - window.innerHeight;
+      const viewportH = window.innerHeight || document.documentElement.clientHeight;
+      const totalScroll = containerRef.current.offsetHeight - viewportH;
       if (totalScroll <= 0) return;
       const rawProgress = -rect.top / totalScroll;
       targetProgress = Math.min(1, Math.max(0, rawProgress));
@@ -218,14 +234,16 @@ export default function Hero() {
       const diff = targetProgress - currentProgress;
       const speed = Math.abs(diff);
 
-      // Responsive RAF damping: smooth inertia when fast, direct locking when slow
-      const adaptiveLambda = speed > 0.02 ? 14.0 : 18.0;
+      const isMobile = window.innerWidth < 768;
+      // Faster, direct tracking on mobile so thumb swipes don't lag behind
+      const adaptiveLambda = isMobile ? 26.0 : (speed > 0.02 ? 14.0 : 18.0);
       const alpha = 1 - Math.exp(-adaptiveLambda * dt);
 
-      if (Math.abs(diff) > 0.0001) {
-        currentProgress += diff * alpha;
-      } else {
+      // Lock to full completion as user approaches unpin boundary
+      if (targetProgress >= 0.98 || Math.abs(diff) < 0.001) {
         currentProgress = targetProgress;
+      } else {
+        currentProgress += diff * alpha;
       }
 
       setScrollPercent(currentProgress);
@@ -270,15 +288,16 @@ export default function Hero() {
 
   const scrollToNext = () => {
     if (!containerRef.current) return;
-    const totalScroll = containerRef.current.offsetHeight - window.innerHeight;
+    const viewportH = window.innerHeight || document.documentElement.clientHeight;
+    const totalScroll = containerRef.current.offsetHeight - viewportH;
     window.scrollTo({
-      top: window.scrollY + totalScroll * 0.5,
+      top: window.scrollY + totalScroll * 0.4,
       behavior: 'smooth'
     });
   };
 
   return (
-    <div ref={containerRef} className="relative w-full h-[190vh] sm:h-[280vh]">
+    <div ref={containerRef} className="relative w-full h-[320vh] sm:h-[300vh]">
       {/* Sticky Fullscreen Pinned Animation Stage */}
       <div className="sticky top-0 w-full h-screen h-[100dvh] overflow-hidden flex items-center justify-center bg-brand-bg-light dark:bg-brand-bg-dark">
         {/* Hardware-Accelerated High-DPI Canvas for Crisp Fullscreen Scrubbing */}
