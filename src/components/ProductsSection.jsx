@@ -95,14 +95,20 @@ export default function ProductsSection({ onOpenSpecs, onSelectProductQuote }) {
     <section id="products" className="py-24 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark"
+        >
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-brand-text-light dark:text-brand-text-dark">
             OUR PRODUCTS
           </h2>
           <p className="text-sm sm:text-base text-brand-text-light-muted dark:text-brand-text-dark-muted mt-2 max-w-xl">
             Industrial fuel solutions matched to demanding thermal and mechanical applications.
           </p>
-        </div>
+        </motion.div>
 
         {/* Product Grid with 3D Motion Physics */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">

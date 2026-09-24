@@ -22,7 +22,7 @@ export default function TrustSection() {
     },
     {
       title: "Robust Infrastructure Backbone",
-      description: "6,000 MT/mo manufacturing capacity across 3 Odisha plants paired with 6,000 MT/mo coastal import capability.",
+      description: "12,000 MT/mo manufacturing capacity across 3 Odisha plants paired with coastal import capability.",
       icon: Building
     }
   ];
@@ -31,7 +31,13 @@ export default function TrustSection() {
     <section id="clients" className="py-24 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark gap-4"
+        >
           <div>
             <span className="tech-label text-brand-gold dark:text-brand-gold-light">08 / PROVEN TRACK RECORD</span>
             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-brand-text-light dark:text-brand-text-dark mt-2">
@@ -44,7 +50,7 @@ export default function TrustSection() {
           <span className="tech-label text-brand-text-light-subtle dark:text-brand-text-dark-subtle self-start md:self-end font-mono">
             VERIFIED PROCUREMENT RELATIONSHIPS
           </span>
-        </div>
+        </motion.div>
 
         {/* Client Roster (Editorial Typographic Grid - No Fake Logos) */}
         <div className="mb-16">
@@ -80,7 +86,14 @@ export default function TrustSection() {
           {trustPillars.map((pillar, idx) => {
             const Icon = pillar.icon;
             return (
-              <div key={idx} className="space-y-3">
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1, ease: "easeOut" }}
+                className="space-y-3"
+              >
                 <div className="w-10 h-10 rounded-sm bg-brand-bg-surface dark:bg-brand-bg-dark-surface border border-brand-border-light dark:border-brand-border-dark flex items-center justify-center">
                   <Icon className="w-5 h-5 text-brand-teal" />
                 </div>
@@ -90,7 +103,7 @@ export default function TrustSection() {
                 <p className="text-xs text-brand-text-light-muted dark:text-brand-text-dark-muted leading-relaxed">
                   {pillar.description}
                 </p>
-              </div>
+              </motion.div>
             );
           })}
         </div>

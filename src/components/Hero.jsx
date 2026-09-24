@@ -25,16 +25,19 @@ export default function Hero() {
       if (idx < 0 || idx >= TOTAL_FRAMES || requested.has(idx)) return;
       requested.add(idx);
       const img = new Image();
-      img.src = `/hero-sequence/frame_${String(idx).padStart(3, '0')}.webp`;
+      img.src = `/hero-sequence/frame_${String(idx).padStart(3, '0')}.webp?v=clean-v2`;
       img.onload = () => {
         if (!active) return;
         frames[idx] = img;
+        if (lastFrameIdxRef.current === idx) {
+          drawFrame(idx);
+        }
       };
     };
 
     // 1. Immediately load frame 0 for instant First Contentful Paint (<50ms)
     const firstImg = new Image();
-    firstImg.src = '/hero-sequence/frame_000.webp';
+    firstImg.src = '/hero-sequence/frame_000.webp?v=clean-v2';
     firstImg.onload = () => {
       if (!active) return;
       frames[0] = firstImg;
@@ -43,47 +46,30 @@ export default function Hero() {
       drawFrame(0);
     };
 
-    // 2. Preload the immediate initial window (frames 1 to 20)
-    for (let i = 1; i <= 20; i++) {
+    // 2. Preload the initial interactive window (frames 1 to 30)
+    for (let i = 1; i <= 30; i++) {
       loadFrame(i);
     }
 
-    // 3. Background idle loader: stream remaining frames during idle time to protect server bandwidth
-    let idleHandle = null;
-    let nextIdleFrame = 21;
-
-    const scheduleIdleChunk = () => {
-      if (!active || nextIdleFrame >= TOTAL_FRAMES) return;
-
-      const runChunk = (deadline) => {
-        if (!active) return;
-        while (nextIdleFrame < TOTAL_FRAMES && (deadline.timeRemaining() > 1 || deadline.didTimeout)) {
-          loadFrame(nextIdleFrame);
-          nextIdleFrame++;
-        }
-        if (nextIdleFrame < TOTAL_FRAMES) {
-          scheduleNext();
-        }
-      };
-
-      const scheduleNext = () => {
-        if (typeof window.requestIdleCallback === 'function') {
-          idleHandle = window.requestIdleCallback(runChunk, { timeout: 2000 });
-        } else {
-          idleHandle = window.setTimeout(() => runChunk({ timeRemaining: () => 10, didTimeout: false }), 50);
-        }
-      };
-
-      scheduleNext();
+    // 3. Progressive batch streaming: load remaining frames in small non-blocking intervals
+    let batchTimeout = null;
+    let nextBatchFrame = 31;
+    const loadNextBatch = () => {
+      if (!active || nextBatchFrame >= TOTAL_FRAMES) return;
+      const end = Math.min(TOTAL_FRAMES, nextBatchFrame + 15);
+      for (let i = nextBatchFrame; i < end; i++) {
+        loadFrame(i);
+      }
+      nextBatchFrame = end;
+      if (nextBatchFrame < TOTAL_FRAMES) {
+        batchTimeout = setTimeout(loadNextBatch, 25);
+      }
     };
-
-    // Schedule background queue shortly after initial interactive mount
-    const timeoutHandle = setTimeout(scheduleIdleChunk, 350);
+    batchTimeout = setTimeout(loadNextBatch, 80);
 
     // Dynamic preloading window around user's current scrub position
     const preloadAhead = (currentIdx) => {
-      // Prioritize 25 frames ahead and 8 frames behind
-      for (let i = Math.max(0, currentIdx - 8); i <= Math.min(TOTAL_FRAMES - 1, currentIdx + 25); i++) {
+      for (let i = Math.max(0, currentIdx - 10); i <= Math.min(TOTAL_FRAMES - 1, currentIdx + 30); i++) {
         loadFrame(i);
       }
     };
@@ -93,14 +79,7 @@ export default function Hero() {
 
     return () => {
       active = false;
-      clearTimeout(timeoutHandle);
-      if (idleHandle) {
-        if (typeof window.cancelIdleCallback === 'function') {
-          window.cancelIdleCallback(idleHandle);
-        } else {
-          clearTimeout(idleHandle);
-        }
-      }
+      if (batchTimeout) clearTimeout(batchTimeout);
       delete window.__oilteq_preloadAhead;
     };
   }, []);
@@ -153,37 +132,57 @@ export default function Hero() {
       const canvasRatio = displayWidth / displayHeight;
       let drawW, drawH, drawX, drawY;
 
-      if (canvasRatio > videoRatio) {
-        // Wider screen: scale by width
-        drawW = displayWidth;
-        drawH = drawW / videoRatio;
-        drawX = 0;
-        drawY = (displayHeight - drawH) / 2;
-      } else {
-        // Taller screen (Mobile portrait 9:16 - 9:20): scale by height
-        drawH = displayHeight;
-        drawW = drawH * videoRatio;
+      // Fit to screen size on mobile phones & portrait viewports (no distortion, no cropping)
+      const isMobile = displayWidth < 768 || canvasRatio < 1.0;
 
-        // Dynamic portrait focal tracking:
-        // In early frames (0 - 85), bias camera framing slightly to keep truck centered in portrait mode
-        // Then smoothly interpolate back to true center (0.5) as the circuit particles bloom outward
-        let focalX = 0.5;
+      if (isMobile) {
+        // Uniform fit-to-screen (contain) so the entire 16:9 industrial animation fits inside the phone display
+        const scale = Math.min(displayWidth / 1920, displayHeight / 1080);
+        drawW = Math.round(1920 * scale);
+        drawH = Math.round(1080 * scale);
+        drawX = Math.round((displayWidth - drawW) / 2);
+
+        // Remove gap above video on mobile: bring video up directly below top header
         if (canvasRatio < 1.0) {
-          const progress = frameIndex / (TOTAL_FRAMES - 1);
-          if (progress < 0.4) {
-            const t = progress / 0.4;
-            // Bias smoothly towards road line (0.54) then to center (0.50)
-            focalX = 0.54 * (1 - t) + 0.50 * t;
-          } else {
-            focalX = 0.50;
-          }
+          const mobileHeaderOffset = Math.min(76, Math.max(64, Math.round(displayHeight * 0.085)));
+          drawY = mobileHeaderOffset;
+        } else {
+          drawY = Math.round((displayHeight - drawH) / 2);
         }
-
-        drawX = (displayWidth - drawW) * focalX;
-        drawY = 0;
+      } else {
+        // Desktop / widescreen viewports: Cover the stage seamlessly
+        if (canvasRatio > videoRatio) {
+          drawW = displayWidth;
+          drawH = drawW / videoRatio;
+          drawX = 0;
+          drawY = (displayHeight - drawH) / 2;
+        } else {
+          drawH = displayHeight;
+          drawW = drawH * videoRatio;
+          drawX = (displayWidth - drawW) / 2;
+          drawY = 0;
+        }
       }
 
       ctx.drawImage(img, drawX, drawY, drawW, drawH);
+
+      // On mobile screens, add seamless feather gradients at top & bottom edges to melt into page theme
+      if (isMobile) {
+        const topFeatherH = 12;
+        const botFeatherH = Math.min(28, Math.max(14, Math.round(drawH * 0.11)));
+
+        const topGrad = ctx.createLinearGradient(0, drawY, 0, drawY + topFeatherH);
+        topGrad.addColorStop(0, isDarkMode ? 'rgba(16, 18, 18, 1)' : 'rgba(238, 236, 227, 1)');
+        topGrad.addColorStop(1, isDarkMode ? 'rgba(16, 18, 18, 0)' : 'rgba(238, 236, 227, 0)');
+        ctx.fillStyle = topGrad;
+        ctx.fillRect(drawX, drawY, drawW, topFeatherH);
+
+        const botGrad = ctx.createLinearGradient(0, drawY + drawH - botFeatherH, 0, drawY + drawH);
+        botGrad.addColorStop(0, isDarkMode ? 'rgba(16, 18, 18, 0)' : 'rgba(238, 236, 227, 0)');
+        botGrad.addColorStop(1, isDarkMode ? 'rgba(16, 18, 18, 1)' : 'rgba(238, 236, 227, 1)');
+        ctx.fillStyle = botGrad;
+        ctx.fillRect(drawX, drawY + drawH - botFeatherH, drawW, botFeatherH);
+      }
     }
 
     ctx.restore();
@@ -207,6 +206,9 @@ export default function Hero() {
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll, { passive: true });
+    if (window.__oilteq_lenis) {
+      window.__oilteq_lenis.on('scroll', onScroll);
+    }
     onScroll();
 
     const animateLoop = (now) => {
@@ -216,8 +218,8 @@ export default function Hero() {
       const diff = targetProgress - currentProgress;
       const speed = Math.abs(diff);
 
-      // Velocity-adaptive RAF damping: high speed = smooth hydraulic inertia, low speed = sharp precision
-      const adaptiveLambda = speed > 0.03 ? 7.6 : 9.5;
+      // Responsive RAF damping: smooth inertia when fast, direct locking when slow
+      const adaptiveLambda = speed > 0.02 ? 14.0 : 18.0;
       const alpha = 1 - Math.exp(-adaptiveLambda * dt);
 
       if (Math.abs(diff) > 0.0001) {
@@ -249,6 +251,9 @@ export default function Hero() {
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
+      if (window.__oilteq_lenis) {
+        window.__oilteq_lenis.off('scroll', onScroll);
+      }
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
@@ -273,9 +278,9 @@ export default function Hero() {
   };
 
   return (
-    <div ref={containerRef} className="relative w-full h-[280vh]">
+    <div ref={containerRef} className="relative w-full h-[190vh] sm:h-[280vh]">
       {/* Sticky Fullscreen Pinned Animation Stage */}
-      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center bg-brand-bg-light dark:bg-brand-bg-dark">
+      <div className="sticky top-0 w-full h-screen h-[100dvh] overflow-hidden flex items-center justify-center bg-brand-bg-light dark:bg-brand-bg-dark">
         {/* Hardware-Accelerated High-DPI Canvas for Crisp Fullscreen Scrubbing */}
         <canvas
           ref={canvasRef}
@@ -283,17 +288,17 @@ export default function Hero() {
         />
 
         {/* Seamless Edge Blends: Natural top and bottom color feather for uninterrupted flow */}
-        <div className="absolute inset-x-0 top-0 h-28 pointer-events-none bg-gradient-to-b from-brand-bg-light/70 via-brand-bg-light/20 to-transparent dark:from-brand-bg-dark/70 dark:via-brand-bg-dark/20 dark:to-transparent z-[2]" />
+        <div className="absolute inset-x-0 top-0 h-16 sm:h-28 pointer-events-none bg-gradient-to-b from-brand-bg-light/70 via-brand-bg-light/20 to-transparent dark:from-brand-bg-dark/70 dark:via-brand-bg-dark/20 dark:to-transparent z-[2]" />
         
         {/* Bottom feather blend flowing directly into HeroLanding */}
         <div 
-          className="absolute inset-x-0 bottom-0 h-48 pointer-events-none z-[2]" 
+          className="absolute inset-x-0 bottom-0 h-28 sm:h-48 pointer-events-none z-[2]" 
           style={{ 
             background: 'linear-gradient(to top, var(--bg-primary) 0%, var(--bg-primary) 22%, rgba(238,236,227,0.88) 50%, rgba(238,236,227,0.3) 80%, transparent 100%)' 
           }} 
         />
         <div 
-          className="absolute inset-x-0 bottom-0 h-48 pointer-events-none z-[2] hidden dark:block" 
+          className="absolute inset-x-0 bottom-0 h-28 sm:h-48 pointer-events-none z-[2] hidden dark:block" 
           style={{ 
             background: 'linear-gradient(to top, #101212 0%, #101212 22%, rgba(16,18,18,0.88) 50%, rgba(16,18,18,0.3) 80%, transparent 100%)' 
           }} 
@@ -307,32 +312,6 @@ export default function Hero() {
           }}
         />
 
-        {/* Industrial Mission Telemetry HUD (Top-Right) */}
-        <div className="absolute top-20 right-4 sm:top-24 sm:right-8 z-10 pointer-events-none transition-all duration-300">
-          <div className="flex flex-col items-end gap-1.5">
-            <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-black/60 dark:bg-black/80 backdrop-blur-md border border-white/15 shadow-xl">
-              <span className={`w-2 h-2 rounded-full animate-pulse ${
-                scrollPercent < 0.35 ? 'bg-emerald-400' : scrollPercent < 0.70 ? 'bg-amber-400' : 'bg-brand-gold'
-              }`} />
-              <span className="text-[10px] sm:text-[11px] font-mono tracking-wider text-white/95 uppercase font-semibold">
-                {scrollPercent < 0.35
-                  ? 'Phase 01: Fleet Inbound'
-                  : scrollPercent < 0.70
-                  ? 'Phase 02: Thermal Distillation'
-                  : 'Phase 03: Regional Grid Dispatch'}
-              </span>
-            </div>
-            
-            {/* Live Monospace Frame Counter & Scrub Percentage */}
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded-sm bg-black/40 backdrop-blur-sm border border-white/10 text-[9px] font-mono text-white/80">
-              <span className="text-brand-gold font-bold">FRAME {String(currentFrameIndex).padStart(3, '0')}</span>
-              <span className="text-white/30">/</span>
-              <span>240</span>
-              <span className="text-white/30">•</span>
-              <span className="font-semibold text-emerald-400">{Math.round(scrollPercent * 100)}%</span>
-            </div>
-          </div>
-        </div>
 
         {/* Real-time Technical Scrub Metrics (Bottom-Left, Desktop) */}
         <div 
@@ -367,7 +346,7 @@ export default function Hero() {
 
         {/* Minimalist Scroll Indicator (Fades out smoothly as user scrolls) */}
         <div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-auto transition-opacity duration-300 z-10"
+          className="absolute top-[calc(76px+56.25vw+1.75rem)] sm:top-auto sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-auto transition-opacity duration-300 z-10"
           style={{ opacity: promptOpacity }}
         >
           <button
@@ -390,7 +369,7 @@ export default function Hero() {
 
         {/* User-Requested Transition Reveal: POWERING INDUSTRY RELIABILITY in one line in bold black */}
         <div
-          className="absolute inset-x-0 bottom-10 sm:bottom-14 md:bottom-16 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pointer-events-none z-10"
+          className="absolute inset-x-0 top-[calc(76px+56.25vw+1.25rem)] sm:top-auto sm:bottom-14 md:bottom-16 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pointer-events-none z-10"
           style={{
             opacity: textOpacity,
             transform: `translateY(${textTranslateY}px)`,

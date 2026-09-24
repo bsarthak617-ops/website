@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon, ArrowUpRight } from 'lucide-react';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 import Logo from './Logo';
 
 export default function Navbar({ isDark, setIsDark, onOpenSpecs, onOpenQuote }) {
@@ -30,7 +30,7 @@ export default function Navbar({ isDark, setIsDark, onOpenSpecs, onOpenQuote }) 
     { name: 'Products', href: '#products' },
     { name: 'Industries', href: '#industries' },
     { name: 'Manufacturing', href: '#manufacturing' },
-    { name: 'Request a Quote', href: '#quote' },
+    { name: 'Supply Corridors', href: '#supply-corridor' },
   ];
 
   const handleLinkClick = (href) => {
@@ -67,33 +67,19 @@ export default function Navbar({ isDark, setIsDark, onOpenSpecs, onOpenQuote }) 
           ))}
         </nav>
 
-        {/* Desktop Right Actions: Theme Toggle + Quote Button */}
+        {/* Desktop Right Actions: Quote Button */}
         <div className="hidden lg:flex items-center space-x-4">
           <button
-            onClick={() => setIsDark(!isDark)}
-            className="p-2 rounded-full border border-brand-border-light dark:border-brand-border-dark text-brand-text-light dark:text-brand-text-dark hover:bg-brand-bg-surface dark:hover:bg-brand-bg-dark-surface transition-colors"
-            aria-label="Toggle theme"
-          >
-            {isDark ? <Sun className="w-4 h-4 text-brand-gold" /> : <Moon className="w-4 h-4 text-brand-charcoal" />}
-          </button>
-          <button
             onClick={onOpenQuote}
-            className="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-brand-charcoal text-white hover:bg-brand-gold dark:bg-white dark:text-brand-charcoal dark:hover:bg-brand-gold transition-colors rounded-sm flex items-center gap-1.5"
+            className="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-brand-charcoal text-white hover:bg-brand-gold dark:bg-white dark:text-brand-charcoal dark:hover:bg-brand-gold transition-colors rounded-sm flex items-center gap-1.5 shadow-sm"
           >
             <span>Quote</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* Mobile menu trigger & Quick Dark Mode */}
+        {/* Mobile menu trigger */}
         <div className="flex items-center space-x-2 lg:hidden">
-          <button
-            onClick={() => setIsDark(!isDark)}
-            className="p-2 rounded-full text-brand-text-light dark:text-brand-text-dark"
-            aria-label="Toggle theme"
-          >
-            {isDark ? <Sun className="w-5 h-5 text-brand-gold" /> : <Moon className="w-5 h-5" />}
-          </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 text-brand-text-light dark:text-brand-text-dark"

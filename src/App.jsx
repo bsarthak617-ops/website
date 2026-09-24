@@ -17,7 +17,7 @@ export default function App() {
   const [isDark, setIsDark] = useState(false);
   const [isSpecsOpen, setIsSpecsOpen] = useState(false);
   const [selectedSpecsProduct, setSelectedSpecsProduct] = useState('batch-plant-fuel');
-  const [selectedQuoteProduct, setSelectedQuoteProduct] = useState('Batch Plant Fuel');
+  const [selectedQuoteProduct, setSelectedQuoteProduct] = useState('Fuel for Batch Mix Plant');
   const [selectedQuoteIndustry, setSelectedQuoteIndustry] = useState('Hotmix Asphalt Plants');
   const [scrollProgress, setScrollProgress] = useState(0);
   const lenisRef = useRef(null);
@@ -74,6 +74,16 @@ export default function App() {
       }
     };
     document.addEventListener('click', handleAnchorClick);
+
+    // Auto-scroll to target if URL contains hash on mount
+    if (window.location.hash) {
+      setTimeout(() => {
+        const targetElement = document.querySelector(window.location.hash);
+        if (targetElement) {
+          lenis.scrollTo(targetElement, { offset: -25, duration: 1.0 });
+        }
+      }, 400);
+    }
 
     return () => {
       cancelAnimationFrame(rafId);

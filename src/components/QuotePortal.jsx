@@ -11,7 +11,7 @@ export default function QuotePortal({ selectedProduct, selectedIndustry, onOpenS
     country: 'India',
     email: '',
     phone: '',
-    product: selectedProduct || 'Batch Plant Fuel',
+    product: selectedProduct || 'Fuel for Batch Mix Plant',
     application: selectedIndustry || 'Hotmix Asphalt Plants',
     quantityMT: 100,
     deliveryLocation: '',
@@ -59,7 +59,7 @@ export default function QuotePortal({ selectedProduct, selectedIndustry, onOpenS
       country: 'India',
       email: '',
       phone: '',
-      product: 'Batch Plant Fuel',
+      product: 'Fuel for Batch Mix Plant',
       application: 'Hotmix Asphalt Plants',
       quantityMT: 100,
       deliveryLocation: '',
@@ -71,17 +71,29 @@ export default function QuotePortal({ selectedProduct, selectedIndustry, onOpenS
     <section id="quote" className="py-24 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark"
+        >
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-brand-text-light dark:text-brand-text-dark">
             LET'S TALK ABOUT YOUR FUEL REQUIREMENT.
           </h2>
           <p className="text-sm sm:text-base text-brand-text-light-muted dark:text-brand-text-dark-muted mt-2 max-w-xl">
             Share your fuel specification requirement, application, volume, and delivery destination for a customized commercial quotation.
           </p>
-        </div>
+        </motion.div>
 
         {/* Procurement Form / Submission Card */}
-        <div className="border border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface rounded-sm p-4 sm:p-8 lg:p-10">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+          className="border border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface rounded-sm p-4 sm:p-8 lg:p-10"
+        >
           {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
               {/* Step 1: Product & Application Configuration */}
@@ -346,7 +358,7 @@ export default function QuotePortal({ selectedProduct, selectedIndustry, onOpenS
               </div>
             </motion.div>
           )}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import { INFRASTRUCTURE_HOTSPOTS } from '../data/companyData';
+import corridorMapImg from '../assets/india-supply-corridor-map.png';
 
 export default function GlobalSection({ onOpenQuote }) {
   const sectionRef = useRef(null);
@@ -40,6 +41,7 @@ export default function GlobalSection({ onOpenQuote }) {
 
   return (
     <section
+      id="supply-corridor"
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -70,11 +72,32 @@ export default function GlobalSection({ onOpenQuote }) {
               {/* Map Image */}
               <div className="relative w-full [transform:translateZ(0px)] filter drop-shadow-[0_30px_45px_rgba(0,0,0,0.92)] drop-shadow-[0_0_55px_rgba(202,154,67,0.25)] transition-all duration-300">
                 <img
-                  src="/india-supply-corridor-transparent.png"
+                  src={corridorMapImg}
                   alt="India Supply Corridor Capability - 3D Logistics Map"
                   className="w-full h-auto object-contain pointer-events-none select-none"
                 />
               </div>
+
+              {/* Interactive Node Hotspots Overlaid Directly on Map Barrels */}
+              {INFRASTRUCTURE_HOTSPOTS.map((spot) => (
+                <button
+                  key={`node-${spot.id}`}
+                  onClick={() => setSelectedSpot(spot)}
+                  style={{
+                    left: `${spot.x}%`,
+                    top: `${spot.y}%`,
+                  }}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer z-10 [transform:translateZ(25px)] focus:outline-none group"
+                  aria-label={`Select ${spot.title} at ${spot.location}`}
+                  title={`${spot.title} - ${spot.location}`}
+                >
+                  <span className={`w-3.5 h-3.5 rounded-full transition-all duration-300 ${
+                    selectedSpot.id === spot.id
+                      ? 'scale-125 bg-brand-gold ring-4 ring-brand-gold/40 shadow-[0_0_12px_rgba(202,154,67,0.9)]'
+                      : 'bg-white/20 group-hover:bg-brand-gold/70 group-hover:scale-125 group-hover:ring-2 group-hover:ring-brand-gold/30'
+                  }`} />
+                </button>
+              ))}
 
               {/* Dynamic Hub Pulse Beacon Synchronized with Selected Asset */}
               <motion.div
@@ -161,22 +184,27 @@ export default function GlobalSection({ onOpenQuote }) {
             </AnimatePresence>
 
             {/* Quick Switch Buttons for All Assets */}
-            <div className="pt-6 border-t border-white/10 mt-6 space-y-4">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-white/45 block">
-                ALL INFRASTRUCTURE ASSETS:
-              </span>
-              <div className="flex flex-wrap gap-2">
+            <div className="pt-5 border-t border-white/10 mt-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-white/50 block">
+                  ACTIVE SUPPLY CORRIDORS ({INFRASTRUCTURE_HOTSPOTS.length}):
+                </span>
+                <span className="text-[10px] font-mono text-brand-gold">
+                  CLICK HUB TO INSPECT
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1.5 max-h-[175px] overflow-y-auto pr-1">
                 {INFRASTRUCTURE_HOTSPOTS.map((s) => (
                   <button
                     key={s.id}
                     onClick={() => setSelectedSpot(s)}
-                    className={`px-3.5 py-2 min-h-[38px] text-xs font-medium rounded-lg border transition-all flex items-center justify-center ${
+                    className={`px-2.5 py-1.5 min-h-[32px] text-[11px] font-medium rounded-lg border transition-all flex items-center justify-center ${
                       selectedSpot.id === s.id
-                        ? 'bg-brand-gold text-brand-charcoal font-bold border-brand-gold shadow-md shadow-brand-gold/20'
+                        ? 'bg-brand-gold text-brand-charcoal font-bold border-brand-gold shadow-md shadow-brand-gold/20 scale-[1.02]'
                         : 'bg-white/[0.05] text-white/70 hover:text-white border-white/10 hover:border-white/20 hover:bg-white/[0.08]'
                     }`}
                   >
-                    {s.title.split(' ')[0]} {s.title.split(' ')[1]}
+                    {s.title}
                   </button>
                 ))}
               </div>

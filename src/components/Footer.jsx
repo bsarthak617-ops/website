@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { ArrowUp, MapPin, ShieldCheck } from 'lucide-react';
 import Logo from './Logo';
 import InteractiveQRCode from './InteractiveQRCode';
@@ -15,41 +16,64 @@ export default function Footer({ onOpenSpecs, onOpenQuote }) {
           {/* Brand Info & Operational Facilities on Left */}
           <div className="flex-1 space-y-6 max-w-2xl">
             {/* Brand Info */}
-            <div className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="space-y-4"
+            >
               <a href="#" className="inline-block group">
                 <Logo dropClassName="h-10 sm:h-11" textClassName="h-7" />
               </a>
 
               <p className="text-xs sm:text-sm text-brand-text-light-muted dark:text-brand-text-dark-muted leading-relaxed">
-                Oilteq Industries is a dedicated industrial fuel manufacturer and supplier delivering Batch Plant Fuel, Blended Fuel Oil, and high-heat industrial energy solutions with reliable nationwide tanker dispatch.
+                Oilteq Industries is a dedicated industrial fuel manufacturer and supplier delivering Fuel for Batch Mix Plant, Fuel for Hotmix Plant, and high-heat industrial energy solutions with reliable nationwide tanker dispatch.
               </p>
-            </div>
+            </motion.div>
 
             {/* Operational Facilities Footprint */}
             <div className="space-y-2.5 text-xs font-mono text-brand-text-light-muted dark:text-brand-text-dark-muted">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5 text-brand-gold shrink-0" />
-                <span>Manufacturing Units: Jharsuguda, Odisha 768201</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5 text-brand-teal shrink-0" />
-                <span>Import Operations: Maharashtra & Gujarat Port Terminals</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-3.5 h-3.5 text-brand-forest shrink-0" />
-                <span>In-House QA Testing Laboratories: Odisha & Maharashtra</span>
-              </div>
+              {[
+                { icon: MapPin, color: "text-brand-gold", text: "Manufacturing Units: Jharsuguda, Odisha 768201" },
+                { icon: MapPin, color: "text-brand-teal", text: "Import Operations: Maharashtra & Gujarat Port Terminals" },
+                { icon: ShieldCheck, color: "text-brand-forest", text: "In-House QA Testing Laboratories: Odisha & Maharashtra" }
+              ].map((item, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.15 + idx * 0.1, ease: "easeOut" }}
+                  className="flex items-center gap-2"
+                >
+                  <item.icon className={`w-3.5 h-3.5 ${item.color} shrink-0`} />
+                  <span>{item.text}</span>
+                </motion.div>
+              ))}
             </div>
           </div>
 
           {/* Motion-Friendly Cursor-Reactive QR Code on Right */}
-          <div className="shrink-0 flex items-center justify-center sm:justify-end self-center sm:self-start">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.25, ease: "easeOut" }}
+            className="shrink-0 flex items-center justify-center sm:justify-end self-center sm:self-start"
+          >
             <InteractiveQRCode url="https://oilteqindustries.com/#" />
-          </div>
+          </motion.div>
         </div>
 
         {/* Bottom Bar & Copyright */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-brand-text-light-subtle dark:text-brand-text-dark-subtle">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-brand-text-light-subtle dark:text-brand-text-dark-subtle"
+        >
           <p>© {new Date().getFullYear()} OILTEQ INDUSTRIES. All rights reserved. Industrial Fuel Solutions.</p>
           
           <div className="flex items-center gap-6">
@@ -62,7 +86,7 @@ export default function Footer({ onOpenSpecs, onOpenQuote }) {
               <ArrowUp className="w-3.5 h-3.5" />
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

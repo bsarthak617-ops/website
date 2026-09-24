@@ -10,14 +10,20 @@ export default function IndustriesSection({ onSelectIndustryQuote }) {
     <section id="industries" className="py-24 px-4 sm:px-6 lg:px-8 border-t border-brand-border-light dark:border-brand-border-dark bg-brand-bg-surface dark:bg-brand-bg-dark-surface relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mb-16 pb-6 border-b border-brand-border-light dark:border-brand-border-dark"
+        >
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-brand-text-light dark:text-brand-text-dark">
             BUILT FOR ENERGY-INTENSIVE INDUSTRIES.
           </h2>
           <p className="text-sm sm:text-base text-brand-text-light-muted dark:text-brand-text-dark-muted mt-2 max-w-xl">
             Engineered fuels formulated to sustain critical continuous combustion environments without flame fluctuations.
           </p>
-        </div>
+        </motion.div>
 
         {/* Interactive Industry Matrix */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -28,35 +34,38 @@ export default function IndustriesSection({ onSelectIndustryQuote }) {
                 key={ind.id}
                 onMouseEnter={() => setHoveredId(ind.id)}
                 onMouseLeave={() => setHoveredId(null)}
+                onClick={() => setHoveredId(prev => prev === ind.id ? null : ind.id)}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className={`relative p-7 border transition-all duration-300 rounded-sm overflow-hidden group flex flex-col justify-between min-h-[320px] ${
+                className={`relative p-7 border transition-all duration-300 rounded-sm overflow-hidden group flex flex-col justify-between min-h-[320px] cursor-pointer select-none ${
                   isHovered
                     ? 'border-brand-gold shadow-2xl shadow-black/25 dark:shadow-black/70 -translate-y-1.5'
                     : 'border-brand-border-light dark:border-brand-border-dark bg-brand-bg-light dark:bg-brand-bg-dark hover:border-brand-border-light/90'
                 }`}
               >
-                {/* Glowing Gold Top Edge on Hover */}
+                {/* Glowing Gold Top Edge on Hover / Tap */}
                 <div className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-brand-gold to-transparent transition-opacity duration-300 pointer-events-none z-20 ${
                   isHovered ? 'opacity-100' : 'opacity-0'
                 }`} />
 
-                {/* Background image reveal on hover */}
+                {/* Background image reveal on hover & always visible as subtle backdrop on mobile scroll */}
                 <div
                   className={`absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out pointer-events-none ${
-                    isHovered ? 'opacity-100 scale-105 filter contrast-115 brightness-90' : 'opacity-0 scale-100'
+                    isHovered
+                      ? 'opacity-100 scale-105 filter contrast-115 brightness-90'
+                      : 'opacity-30 md:opacity-0 scale-100'
                   }`}
                   style={{ backgroundImage: `url('${ind.image}')` }}
                 />
 
-                {/* Dark gradient scrim on hover to guarantee text contrast */}
+                {/* Dark gradient scrim on hover / subtle contrast on mobile */}
                 <div
                   className={`absolute inset-0 transition-opacity duration-500 pointer-events-none ${
                     isHovered
                       ? 'bg-gradient-to-t from-brand-charcoal/95 via-brand-charcoal/80 to-brand-charcoal/60 opacity-100'
-                      : 'opacity-0'
+                      : 'opacity-40 md:opacity-0 bg-gradient-to-t from-brand-bg-light via-brand-bg-light/80 to-transparent dark:from-brand-bg-dark dark:via-brand-bg-dark/80 dark:to-transparent'
                   }`}
                 />
 
@@ -98,7 +107,10 @@ export default function IndustriesSection({ onSelectIndustryQuote }) {
                   </div>
 
                   <button
-                    onClick={() => onSelectIndustryQuote(ind.name)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelectIndustryQuote(ind.name);
+                    }}
                     className={`p-2 border transition-all rounded-sm ${
                       isHovered
                         ? 'bg-brand-gold text-brand-charcoal border-brand-gold shadow-md'

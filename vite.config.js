@@ -7,6 +7,9 @@ export default defineConfig({
   server: {
     host: true,
     port: 3000,
-    open: false
+    open: false,
+    watch: {
+      ignored: ['**/*.mp4', '**/*.mkv', '**/*.avi', '**/dist/**', '**/public/hero-sequence/**', '**/.temp*/**', '**/scratch*/**', '**/*.db*']
+    }
   }
 })
