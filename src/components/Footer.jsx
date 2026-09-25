@@ -62,7 +62,7 @@ export default function Footer({ onOpenSpecs, onOpenQuote }) {
             transition={{ duration: 0.6, delay: 0.25, ease: "easeOut" }}
             className="shrink-0 flex items-center justify-center sm:justify-end self-center sm:self-start"
           >
-            <InteractiveQRCode url="https://oilteqindustries.com/#" />
+            <InteractiveQRCode url="https://oilteqindustries.com/scan" />
           </motion.div>
         </div>
 

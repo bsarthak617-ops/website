@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
 
 export default function InteractiveQRCode({ 
-  url = 'https://oilteqindustries.com/#',
+  url = 'https://oilteqindustries.com/scan',
   className = ''
 }) {
   const cardRef = useRef(null);
@@ -64,8 +64,11 @@ export default function InteractiveQRCode({
   };
 
   return (
-    <div 
-      className={`relative inline-block select-none ${className}`}
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`relative inline-block select-none no-underline ${className}`}
       style={{ perspective: 1200 }}
     >
       <motion.div
@@ -165,6 +168,6 @@ export default function InteractiveQRCode({
           <span className={`absolute bottom-0 right-0 w-3.5 h-3.5 border-b-2 border-r-2 border-brand-gold transition-all duration-300 ${isHovered ? 'translate-x-1 translate-y-1 shadow-[0_0_8px_rgba(202,154,67,0.6)]' : ''}`} />
         </div>
       </motion.div>
-    </div>
+    </a>
   );
 }
