@@ -135,23 +135,6 @@ export default function InteractiveQRCode({
           )}
         </div>
 
-        {/* Layer 4: Interactive Floating 3D Central Teardrop Badge */}
-        <motion.div
-          style={{ transform: 'translateZ(38px)' }}
-          animate={isHovered ? { y: [0, -2, 0] } : { y: 0 }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute inset-0 m-auto w-11 h-11 sm:w-12 sm:h-12 rounded-full 
-                     bg-[#F4F1EA] dark:bg-[#17201B] border-2 border-brand-gold 
-                     shadow-[0_4px_14px_rgba(0,0,0,0.22)] dark:shadow-[0_4px_16px_rgba(202,154,67,0.35)] 
-                     flex items-center justify-center pointer-events-none z-40"
-        >
-          <img
-            src="/oilteq-drop-animated.webp"
-            alt="Oilteq Teardrop Emblem"
-            className="w-7 h-7 sm:w-7.5 sm:h-7.5 object-contain filter drop-shadow-[0_1px_3px_rgba(0,0,0,0.2)]"
-            draggable="false"
-          />
-        </motion.div>
 
         {/* Layer 5: Dynamic 3D Corner Reticle Accents */}
         <div 
