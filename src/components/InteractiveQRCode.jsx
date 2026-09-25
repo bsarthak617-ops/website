@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
 
 export default function InteractiveQRCode({ 
-  url = 'https://oilteqindustries.com/scan',
+  url = '/scan',
   className = ''
 }) {
   const cardRef = useRef(null);
